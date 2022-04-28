@@ -1,4 +1,4 @@
-from re import compile
+from re import compile, findall
 from enum import Enum
 from typing import List
 
@@ -24,13 +24,67 @@ class BloodType(Enum):
 
 b = BloodType('A型')
 
+r = '''{
+   "number":123,
+   "bool ean":true,
+   "string":"togatoga",
+   "object":{
+      "number":2E10
+   }
+}
+'''
+
 
 json_data = '[{"nam e": "Taro", "age": 14, "check": true}, {"name": "Jiro", "age": 23, "check": false}, {"name": "Tom", "age": 16, "check": false}]'
 
-pattern = compile(r'([|]|{|}|:|,|")')
+
+json_chr_list = list(json_data)
+tokens = []
+
+for chr in json_chr_list:
+  if chr == '[':
+    tokens.append(chr)
+    continue
+  elif chr == '{':
+    tokens.append(chr)
+    continue
+  elif chr == ':':
+    tokens.append(chr)
+    continue
+  print(chr)
+
+
+
+#pattern = compile(r'([|]|{|}|:|,|")')
+#pattern = compile(r'([|]|{|}|:|,)')
+#pattern = compile(r'([|]|{|}|:|,|\n)')
+#pattern = compile(r'(\[|\]|\{|\}|:|,|\n)')
+pattern = compile(r'(?=(\[|\]|\{|\}|:|,))')
+#pattern = compile(r'"(.+?)"')
+
+pattern = compile(r'([|]|{|}|:|,)')
+
 
 #print(json_data)
 
 slice_data = pattern.split(json_data)
-pprint(slice_data)
+#slice_data = pattern.split(r)
+filter_data = list(filter(lambda f: bool(f), slice_data))
+#slice_data = findall('[^\}|,]+}?', json_data)
+#slice_data = findall(r'[^:]+:?', json_data)
+#[print(t) for t in filter_data]
+'''
+print(slice_data[30])
+print(len(slice_data[30]))
+print(bool(slice_data[30]))
+print(slice_data[32])
+print(len(slice_data[32]))
+print(bool(slice_data[32]))
+'''
+#list_str = list(r)
+#print(list_str)
+
+
+
+
 
