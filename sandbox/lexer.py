@@ -1,5 +1,8 @@
+from re import compile
 from enum import Enum
 from typing import List
+
+from pprint import pprint
 
 
 class Token(Enum):
@@ -22,7 +25,12 @@ class BloodType(Enum):
 b = BloodType('A型')
 
 
-json_data = '[{"name": "Taro", "age": 14, "check": true}, {"name": "Jiro", "age": 23, "check": false}, {"name": "Tom", "age": 16, "check": false}]'
+json_data = '[{"nam e": "Taro", "age": 14, "check": true}, {"name": "Jiro", "age": 23, "check": false}, {"name": "Tom", "age": 16, "check": false}]'
 
-print(json_data)
+pattern = compile(r'([|]|{|}|:|,|")')
+
+#print(json_data)
+
+slice_data = pattern.split(json_data)
+pprint(slice_data)
 
