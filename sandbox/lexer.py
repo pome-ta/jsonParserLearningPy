@@ -22,6 +22,7 @@ class BloodType(Enum):
   def show_all(cls) -> List[str]:
     return list(map(lambda c: c.value, cls))
 
+
 b = BloodType('A型')
 
 r = '''{
@@ -34,14 +35,14 @@ r = '''{
 }
 '''
 
-
 json_data = '[{"nam e": "Taro", "age": 14, "check": true}, {"name": "Jiro", "age": 23, "check": false}, {"name": "Tom", "age": 16, "check": false}]'
 
-
 json_chr_list = list(json_data)
+value = ''
+flag = 0
 tokens = []
 
-for chr in json_chr_list:
+for n, chr in enumerate(json_chr_list):
   if chr == '[':
     tokens.append(chr)
     continue
@@ -51,9 +52,26 @@ for chr in json_chr_list:
   elif chr == ':':
     tokens.append(chr)
     continue
-  print(chr)
-
-
+  elif chr == ',':
+    tokens.append(chr)
+    continue
+  elif chr == '}':
+    tokens.append(chr)
+    continue
+  elif chr == ']':
+    tokens.append(chr)
+    continue
+  elif chr == '"':
+    #flag = 0 if flag else 1
+    value += chr
+    if flag:
+      flag = 0
+      tokens.append(value)
+      value = ''
+      continue
+    flag = 1
+  else:
+    value += chr
 
 #pattern = compile(r'([|]|{|}|:|,|")')
 #pattern = compile(r'([|]|{|}|:|,)')
@@ -63,7 +81,6 @@ pattern = compile(r'(?=(\[|\]|\{|\}|:|,))')
 #pattern = compile(r'"(.+?)"')
 
 pattern = compile(r'([|]|{|}|:|,)')
-
 
 #print(json_data)
 
@@ -83,8 +100,4 @@ print(bool(slice_data[32]))
 '''
 #list_str = list(r)
 #print(list_str)
-
-
-
-
 
