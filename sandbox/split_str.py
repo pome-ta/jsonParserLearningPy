@@ -47,6 +47,9 @@ def pending_tokens(json_str):
   return tokens
 
 
+
+
+
 token_list = pending_tokens(json_chr_list)
 print(len(json_chr_list))
 
