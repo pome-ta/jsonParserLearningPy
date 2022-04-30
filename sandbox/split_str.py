@@ -48,15 +48,35 @@ def pending_tokens(json_str):
 
 
 
-
-
 token_list = pending_tokens(json_chr_list)
-print(len(json_chr_list))
-
+#print(len(json_chr_list))
+'''
 for indx in range(len(json_chr_list)):
   if json_chr_list[indx] == 't':
     print(json_chr_list[indx: indx + 4])
   if json_chr_list[indx] == 'f':
     print(json_chr_list[indx: indx + 5])
   print(indx)
+
+'''
+cnt = 0
+str_length = len(json_chr_list)
+quotation_flag = False
+value = ''
+
+print(json_chr_list.index('"'))
+
+for _ in range(str_length):
+  if cnt > str_length:
+    break
+  #print(json_chr_list[cnt])
+  if json_chr_list[cnt] == '"':
+    value += json_chr_list[cnt]
+    if quotation_flag:
+      value = ''
+      sep_flag = False
+    else:
+      sep_flag = True
+      
+  cnt += 1
 
