@@ -1,10 +1,10 @@
-import json
+#import json
 
 json_data = '[{"nam e": "Taro", "age": 14, "check": true}, {"name": "Jiro", "age": 23, "check": false}, {"name": "Tom", "age": 16, "check": false}, {"name": null, "age": 14, "check": true}]'
 
 json_chr_list = list(json_data)
 
-j = json.loads(json_data)
+#j = json.loads(json_data)
 
 
 # `"`
@@ -47,8 +47,7 @@ def pending_tokens(json_str):
   return tokens
 
 
-
-token_list = pending_tokens(json_chr_list)
+#token_list = pending_tokens(json_chr_list)
 #print(len(json_chr_list))
 '''
 for indx in range(len(json_chr_list)):
@@ -59,24 +58,34 @@ for indx in range(len(json_chr_list)):
   print(indx)
 
 '''
-cnt = 0
+index = 0
 str_length = len(json_chr_list)
 quotation_flag = False
-value = ''
+str_value = ''
+tokens = []
 
-print(json_chr_list.index('"'))
+symbols = ['[', ']', '{', '}', ':', ',']
 
 for _ in range(str_length):
-  if cnt > str_length:
+  if index >= str_length:
     break
-  #print(json_chr_list[cnt])
-  if json_chr_list[cnt] == '"':
-    value += json_chr_list[cnt]
-    if quotation_flag:
-      value = ''
-      sep_flag = False
-    else:
-      sep_flag = True
-      
-  cnt += 1
+  element = json_chr_list[index]
+  if element in symbols:
+    tokens.append(element)
+    index += 1
+    continue
+
+  elif element == '"':
+    str_value += element
+    index += 1
+    cut_top_list = json_chr_list[index:]
+    find_index = cut_top_list.index('"') + 1
+    str_value += ''.join(cut_top_list[:find_index])
+    tokens.append(str_value)
+    str_value = ''
+    index += find_index
+    
+  else:
+    index += 1
+    
 
