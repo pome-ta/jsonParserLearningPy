@@ -90,6 +90,10 @@ for _ in range(str_length):
     break
   element = json_chr_list[index]
   
+  if element.isspace():
+    index += 1
+    continue
+  
 
   if element in symbols:
     tokens.append(element)
