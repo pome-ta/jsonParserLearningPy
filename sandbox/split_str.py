@@ -1,6 +1,6 @@
 #import json
 
-json_data = '[{"nam e": "Taro", "age": 14, "check": true}, {"name": "Jiro", "age": 23, "check": false}, {"name": "Tom", "age": 16, "check": false}, {"name": null, "age": 14, "check": true}]'
+json_data = '[{"nam e": "Taro", "age": 14, "check": true}, {"name": "Jiro", "age": 23, "check": false}, {"name": "Tom", "age": 16, "check": false}, {"name": null, "age": 14, "check": null}]'
 
 json_chr_list = list(json_data)
 
@@ -58,6 +58,25 @@ for indx in range(len(json_chr_list)):
   print(indx)
 
 '''
+
+
+def seek_quotation_index(crop_list):
+  for n, string in enumerate(crop_list):
+    if string == '"':
+      if crop_list[n - 1] == '\\':
+        continue
+      return n
+
+
+def seek_number_index(crop_list):
+  n = crop_list.index(',')
+  for n, string in enumerate(crop_list):
+    if string == '"':
+      if crop_list[n - 1] == '\\':
+        continue
+      return n
+
+
 index = 0
 str_length = len(json_chr_list)
 quotation_flag = False
@@ -70,22 +89,41 @@ for _ in range(str_length):
   if index >= str_length:
     break
   element = json_chr_list[index]
+  
+
   if element in symbols:
     tokens.append(element)
     index += 1
     continue
 
-  elif element == '"':
+  if element == 't':
+    cut_top_list = json_chr_list[index:]
+    tokens.append(''.join(cut_top_list[:4]))
+    index += 4
+    continue
+
+  if element == 'f':
+    cut_top_list = json_chr_list[index:]
+    tokens.append(''.join(cut_top_list[:5]))
+    index += 5
+    continue
+    
+  if element == 'n':
+    cut_top_list = json_chr_list[index:]
+    tokens.append(''.join(cut_top_list[:4]))
+    index += 4
+    continue
+
+  if element == '"':
     str_value += element
     index += 1
     cut_top_list = json_chr_list[index:]
-    find_index = cut_top_list.index('"') + 1
-    str_value += ''.join(cut_top_list[:find_index])
+    step_index = seek_quotation_index(cut_top_list) + 1
+    str_value += ''.join(cut_top_list[:step_index])
     tokens.append(str_value)
     str_value = ''
-    index += find_index
-    
-  else:
-    index += 1
-    
+    index += step_index
+    continue
+
+  index += 1
 
