@@ -1,7 +1,6 @@
 from pathlib import Path
 
 # --- テストデータ
-
 # todo: エスケープシーケンス指定時は、raw文字列指定
 json_data = r'''{
         "k0": "\" \\ \/ \b \f \n \r \t",
@@ -27,37 +26,31 @@ def get_string_step(tail_list):
   quotation_flag = False
   for n, string in enumerate(tail_list):
     if string == '"':
-      # todo: 先頭`"` は、最後尾index を取得してしまう
-      if n and tail_list[n - 1] == '\\':
-        continue
-      if quotation_flag:
-        break
+      # todo: 先頭`"` は、最後尾index を取得するため
+      if n and tail_list[n - 1] == '\\': continue
+      if quotation_flag: break
       quotation_flag = True
   str_value = ''.join(tail_list[:n + 1])
-  return str_value, len(str_value)
+  return (str_value, len(str_value))
 
 
 def get_number_step(tail_list):
   end = [',', '}', ']', '\n']
   for n, number in enumerate(tail_list):
-    if number in end:
-      break
+    if number in end: break
   num_value = ''.join(tail_list[:n])
-  return num_value, len(num_value)
+  return (num_value, len(num_value))
 
 
 def get_tokens(str_list):
   tokens = []
   symbols = ['[', ']', '{', '}', ':', ',']
-  str_length = len(str_list)
   index = 0
 
-  for _ in range(str_length):
-    if index >= str_length:
-      break
+  for _ in range(len(str_list)):
+    if index >= len(str_list): break
 
     element = str_list[index]
-
     if element.isspace():
       index += 1
       continue
@@ -68,39 +61,35 @@ def get_tokens(str_list):
       continue
 
     if element == 't':
-      cut_top_list = str_list[index:]
       # xxx: `true` 確認
-      tokens.append(''.join(cut_top_list[:4]))
+      print(str_list[index:index + 4])
+      tokens.append(''.join(str_list[index:index + 4]))
       index += 4
       continue
 
     if element == 'f':
-      cut_top_list = str_list[index:]
       # xxx: `false` 確認
-      tokens.append(''.join(cut_top_list[:5]))
+      tokens.append(''.join(str_list[index:index + 5]))
       index += 5
       continue
 
     if element == 'n':
-      cut_top_list = str_list[index:]
       # xxx: `null` 確認
-      tokens.append(''.join(cut_top_list[:4]))
+      tokens.append(''.join(str_list[index:index + 5]))
       index += 4
       continue
 
     # string
     if element == '"':
-      cut_top_list = str_list[index:]
-      str_value, step = get_string_step(cut_top_list)
-      tokens.append(str_value)
+      value, step = get_string_step(str_list[index:])
+      tokens.append(value)
       index += step
       continue
 
     # number
     if element:
-      cut_top_list = str_list[index:]
-      num_value, step = get_number_step(cut_top_list)
-      tokens.append(num_value)
+      value, step = get_number_step(str_list[index:])
+      tokens.append(value)
       index += step
       continue
 
@@ -119,5 +108,5 @@ if __name__ == '__main__':
   json_data = json_path.read_text(encoding='utf-8')
   json_chr_list = list(json_data)
   json_tokens = get_tokens(json_chr_list)
-  pprint(json_tokens)
+  print(json_tokens)
 
