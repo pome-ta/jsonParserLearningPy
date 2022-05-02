@@ -1,35 +1,35 @@
 json_data = '[{"nam e": "Taro", "age": 14, "check": true}, {"name": "Jiro", "age": 23, "check": false}, {"name": "Tom", "age": 16, "check": false}, {"name": null, "age": 14, "check": null}]'
 
 
-def seek_quotation_index(crop_list):
+def get_string_step(tail_list):
   quotation_flag = False
-  str_value = ''
-  for n, string in enumerate(crop_list):
+  for n, string in enumerate(tail_list):
     if string == '"':
-      if crop_list[n - 1] == '\\':
+      if quotation_flag:
+        break
+      if tail_list[n - 1] == '\\':
         continue
-      return n
+      quotation_flag = True
+  str_value = ''.join(tail_list[:n + 1])
+  return str_value, len(str_value)
 
 
-def seek_number_index(crop_list):
-  num_value = ''
-  n = crop_list.index(',')
-  return n
+def get_number_step(tail_list):
+  n = tail_list.index(',')
+  num_value = ''.join(tail_list[:n])
+  return num_value, len(num_value)
 
 
 json_chr_list = list(json_data)
 str_length = len(json_chr_list)
 tokens = []
 symbols = ['[', ']', '{', '}', ':', ',']
-
-str_value = ''
-num_value = ''
-
 index = 0
 
 for _ in range(str_length):
   if index >= str_length:
     break
+
   element = json_chr_list[index]
 
   if element.isspace():
@@ -43,44 +43,39 @@ for _ in range(str_length):
 
   if element == 't':
     cut_top_list = json_chr_list[index:]
+    # xxx: `true` 確認
     tokens.append(''.join(cut_top_list[:4]))
     index += 4
     continue
 
   if element == 'f':
     cut_top_list = json_chr_list[index:]
+    # xxx: `false` 確認
     tokens.append(''.join(cut_top_list[:5]))
     index += 5
     continue
 
   if element == 'n':
     cut_top_list = json_chr_list[index:]
+    # xxx: `null` 確認
     tokens.append(''.join(cut_top_list[:4]))
     index += 4
     continue
 
   # string
   if element == '"':
-    str_value += element
-    index += 1
     cut_top_list = json_chr_list[index:]
-    step_index = seek_quotation_index(cut_top_list) + 1
-    str_value += ''.join(cut_top_list[:step_index])
+    str_value, step = get_string_step(cut_top_list)
     tokens.append(str_value)
-    str_value = ''
-    index += step_index
+    index += step
     continue
 
   # number
   if element:
-    num_value += element
-    index += 1
     cut_top_list = json_chr_list[index:]
-    step_index = seek_number_index(cut_top_list)
-    num_value += ''.join(cut_top_list[:step_index])
+    num_value, step = get_number_step(cut_top_list)
     tokens.append(num_value)
-    num_value = ''
-    index += step_index
+    index += step
     continue
 
   print(f'{element: element}')
