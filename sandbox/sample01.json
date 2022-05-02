@@ -1,0 +1,17 @@
+{
+        "k0": "\" \\ \/ \b \f \n \r \t",
+        "C": "\u3042",
+        "key0": "screwsat",
+        "key1": 10,
+        "key2": true,
+        "key3": false,
+        "key4": null,
+        "key5": {
+            "key1": [1, 2, 3, 4, null, "togatoga"],
+            "key2": "あいうえお",
+            "key3": "\" \\ \/ \b \f \n \r \t"
+        },
+        "key6": -11.0111,
+        "key7": 1e-10
+}
+

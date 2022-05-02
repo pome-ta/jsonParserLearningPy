@@ -1,3 +1,7 @@
+from pathlib import Path
+
+json_path = Path('./sample01.json')
+
 json_data = '''{
    "number":123,
    "boolean":true,
@@ -8,12 +12,33 @@ json_data = '''{
 }
 '''
 
+# xxx: エスケープシーケンス対応... 1行読み取り？
+json_data = '''{
+        "k0": "\" \\ \/ \b \f \n \r \t",
+        "key0": "screwsat",
+        "key1": 10,
+        "key2": true,
+        "key3": false,
+        "key4": null,
+        "key5": {
+            "key1": [1, 2, 3, 4, null, "togatoga"],
+            "key2": "あいうえお",
+            "key3": "\" \\ \/ \b \f \n \r \t"
+        },
+        "key6": -11.0111,
+        "key7": 1e-10
+}
+
+'''
+
 json_data = '[{"nam e": "Taro", "age": 14, "check": true}, {"name": "Jiro", "age": 23, "check": false}, {"name": "Tom", "age": 16, "check": false}, {"name": null, "age": 14, "check": null}]'
+
 
 
 def get_string_step(tail_list):
   quotation_flag = False
   for n, string in enumerate(tail_list):
+    
     if string == '"':
       if quotation_flag:
         break
@@ -34,6 +59,17 @@ def get_number_step(tail_list):
 
 
 json_chr_list = list(json_data)
+json_raw_list = list(repr(json_data))
+
+qs_s = '"a\"b"'
+for ii in qs_s:
+  print(ii)
+qr_s = r'"a\"b"'
+qp_s = repr(qs_s)
+qb_s = b'"a\"b"'
+
+
+
 str_length = len(json_chr_list)
 tokens = []
 symbols = ['[', ']', '{', '}', ':', ',']
