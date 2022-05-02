@@ -2,6 +2,8 @@ json_data = '[{"nam e": "Taro", "age": 14, "check": true}, {"name": "Jiro", "age
 
 
 def seek_quotation_index(crop_list):
+  quotation_flag = False
+  str_value = ''
   for n, string in enumerate(crop_list):
     if string == '"':
       if crop_list[n - 1] == '\\':
@@ -10,6 +12,7 @@ def seek_quotation_index(crop_list):
 
 
 def seek_number_index(crop_list):
+  num_value = ''
   n = crop_list.index(',')
   return n
 
