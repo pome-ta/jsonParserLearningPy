@@ -22,7 +22,7 @@ json_data = r'''{
 # json_data = '[{"nam e": "Taro", "age": 14, "check": true}, {"name": "Jiro", "age": 23, "check": false}, {"name": "Tom", "age": 16, "check": false}, {"name": null, "age": 14, "check": null}]'
 
 
-def get_string_step(tail_list):
+def get_strings_step(tail_list):
   quotation_flag = False
   for n, string in enumerate(tail_list):
     if string == '"':
@@ -34,7 +34,7 @@ def get_string_step(tail_list):
   return (str_value, len(str_value))
 
 
-def get_number_step(tail_list):
+def get_numbers_step(tail_list):
   end = [',', '}', ']', '\n']
   for n, number in enumerate(tail_list):
     if number in end: break
@@ -81,19 +81,19 @@ def get_tokens(str_list):
 
     # string
     if element == '"':
-      value, step = get_string_step(str_list[index:])
+      value, step = get_strings_step(str_list[index:])
       tokens.append(value)
       index += step
       continue
 
     # number
     if element:
-      value, step = get_number_step(str_list[index:])
+      value, step = get_numbers_step(str_list[index:])
       tokens.append(value)
       index += step
       continue
 
-    # xxx: ここに来てたらエラー
+    # xxx: ここに来てたらエラー 後で書く
     print(f'err!element: {element}')
     index += 1
 
