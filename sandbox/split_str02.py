@@ -1,3 +1,13 @@
+json_data = '''{
+   "number":123,
+   "boolean":true,
+   "string":"togatoga",
+   "object":{
+      "number":2E10
+   }
+}
+'''
+
 json_data = '[{"nam e": "Taro", "age": 14, "check": true}, {"name": "Jiro", "age": 23, "check": false}, {"name": "Tom", "age": 16, "check": false}, {"name": null, "age": 14, "check": null}]'
 
 
@@ -15,7 +25,10 @@ def get_string_step(tail_list):
 
 
 def get_number_step(tail_list):
-  n = tail_list.index(',')
+  end = [',', '}', ']', '\n']
+  for n, number in enumerate(tail_list):
+    if number in end:
+      break
   num_value = ''.join(tail_list[:n])
   return num_value, len(num_value)
 
