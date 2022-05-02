@@ -23,17 +23,12 @@ json_data = r'''{
 # json_data = '[{"nam e": "Taro", "age": 14, "check": true}, {"name": "Jiro", "age": 23, "check": false}, {"name": "Tom", "age": 16, "check": false}, {"name": null, "age": 14, "check": null}]'
 
 
-
-
-
 def get_string_step(tail_list):
   quotation_flag = False
   for n, string in enumerate(tail_list):
     if string == '"':
-      # todo: 先頭の`"` だと、最後尾index を取得してしまうため
+      # todo: 先頭`"` は、最後尾index を取得してしまう
       if n and tail_list[n - 1] == '\\':
-        # print(f'string: {string}')
-        # print(f'[n - 1]: {tail_list[n-1]}')
         continue
       if quotation_flag:
         break
@@ -119,8 +114,10 @@ def get_tokens(str_list):
 if __name__ == '__main__':
   from pprint import pprint
 
-  json_path = Path('./sandbox/sample01.json')
-  json_data = json_path.read_text()
+  #json_path = Path('./sandbox/sample01.json')
+  json_path = Path('./sample01.json')
+  json_data = json_path.read_text(encoding='utf-8')
   json_chr_list = list(json_data)
   json_tokens = get_tokens(json_chr_list)
   pprint(json_tokens)
+
