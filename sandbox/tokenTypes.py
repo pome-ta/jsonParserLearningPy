@@ -19,8 +19,7 @@ class TokenKind(Enum):
 
 if __name__ == '__main__':
   for token in TokenKind:
-    #print(token)
-    pass
+    print(token)
   comma = TokenKind(8)
   print(comma)
 
