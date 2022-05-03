@@ -1,103 +1,54 @@
-from re import compile, findall
-from enum import Enum
+from enum import Enum, auto
 from typing import List
 
-from pprint import pprint
+from tokenTypes 
+from split_str02 import get_tokens
 
 
-class Token(Enum):
-  String = str
 
+class Token:
+  def __init__(self, kind, value=None):
+    self.kind = kind
+    self.value = value
 
-class BloodType(Enum):
-  A = 'A型'
-  B = 'B型'
-  O = 'O型'
-  AB = 'AB型'
+  def __eq__(self, other):
+    if not isinstance(other, Token):
+      return NotImplemented
+    return self.kind == other.kind and self.value == other.value
+    
+    def __str__(self):
+      if self.kind == TokenKind.LBRACKET:
+        return '['
+      elif self.kind == TokenKind.LBRACE:
+        return '{'
+      elif self.kind == TokenKind.COLON:
+        return ':'
+      elif self.kind == TokenKind.COMMA:
+        return ','
+      elif self.kind == TokenKind.RBRACE:
+        return '}'
+      elif self.kind == TokenKind.RBRACKET:
+        return ']'
+      elif self.kind == TokenKind.STRING:
+        return f'{self.value}'
+      else:
+        return str(self.value)
 
-  def __str__(self):
-    return self.name
+def get_lexer(token_list):
+  stack = []
+  for t in token_list:
+    if t == '[':
+      stack.append()
+      
+      
 
-  @classmethod
-  def show_all(cls) -> List[str]:
-    return list(map(lambda c: c.value, cls))
-
-
-b = BloodType('A型')
-
-r = '''{
-   "number":123,
-   "bool ean":true,
-   "string":"togatoga",
-   "object":{
-      "number":2E10
-   }
-}
-'''
-
-json_data = '[{"nam e": "Taro", "age": 14, "check": true}, {"name": "Jiro", "age": 23, "check": false}, {"name": "Tom", "age": 16, "check": false}]'
-
-json_chr_list = list(json_data)
-value = ''
-flag = 0
-tokens = []
-
-for n, chr in enumerate(json_chr_list):
-  if chr == '[':
-    tokens.append(chr)
-    continue
-  elif chr == '{':
-    tokens.append(chr)
-    continue
-  elif chr == ':':
-    tokens.append(chr)
-    continue
-  elif chr == ',':
-    tokens.append(chr)
-    continue
-  elif chr == '}':
-    tokens.append(chr)
-    continue
-  elif chr == ']':
-    tokens.append(chr)
-    continue
-  elif chr == '"':
-    #flag = 0 if flag else 1
-    value += chr
-    if flag:
-      flag = 0
-      tokens.append(value)
-      value = ''
-      continue
-    flag = 1
-  else:
-    value += chr
-
-#pattern = compile(r'([|]|{|}|:|,|")')
-#pattern = compile(r'([|]|{|}|:|,)')
-#pattern = compile(r'([|]|{|}|:|,|\n)')
-#pattern = compile(r'(\[|\]|\{|\}|:|,|\n)')
-pattern = compile(r'(?=(\[|\]|\{|\}|:|,))')
-#pattern = compile(r'"(.+?)"')
-
-pattern = compile(r'([|]|{|}|:|,)')
-
-#print(json_data)
-
-slice_data = pattern.split(json_data)
-#slice_data = pattern.split(r)
-filter_data = list(filter(lambda f: bool(f), slice_data))
-#slice_data = findall('[^\}|,]+}?', json_data)
-#slice_data = findall(r'[^:]+:?', json_data)
-#[print(t) for t in filter_data]
-'''
-print(slice_data[30])
-print(len(slice_data[30]))
-print(bool(slice_data[30]))
-print(slice_data[32])
-print(len(slice_data[32]))
-print(bool(slice_data[32]))
-'''
-#list_str = list(r)
-#print(list_str)
+if __name__ == '__main__':
+  from pprint import pprint
+  from pathlib import Path
+  tokens = []
+  json_path = Path('./sample01.json')
+  json_data = json_path.read_text(encoding='utf-8')
+  json_chr_list = list(json_data)
+  json_tokens = get_tokens(json_chr_list)
+  
 

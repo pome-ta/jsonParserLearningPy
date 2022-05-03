@@ -62,7 +62,6 @@ def get_tokens(str_list):
 
     if element == 't':
       # xxx: `true` 確認
-      print(str_list[index:index + 4])
       tokens.append(''.join(str_list[index:index + 4]))
       index += 4
       continue
