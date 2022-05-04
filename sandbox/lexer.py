@@ -86,5 +86,6 @@ if __name__ == '__main__':
   json_tokens = get_lexer(pre_tokens)
 
   for jt in json_tokens:
-    print(f'{jt.kind} ->{jt.value}')
+    jt
+    #print(f'{jt.kind} ->{jt.value}')
 
