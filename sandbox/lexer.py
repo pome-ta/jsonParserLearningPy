@@ -74,9 +74,13 @@ def get_lexer(token_list):
 if __name__ == '__main__':
   from pprint import pprint
   from pathlib import Path
+  import json
 
   json_path = Path('./sample01.json')
+  with open(json_path, encoding='utf-8') as f:
+    mrj = json.load(f)
   json_data = json_path.read_text(encoding='utf-8')
+  mlj = json.loads(json_data)
   json_chr_list = list(json_data)
   pre_tokens = get_tokens(json_chr_list)
   json_tokens = get_lexer(pre_tokens)
