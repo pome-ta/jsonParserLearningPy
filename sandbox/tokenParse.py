@@ -3,6 +3,11 @@ from split_str02 import get_tokens
 from lexer import get_lexer
 
 
+class DictNode:
+  def __init__(self, key, value):
+    self.key = key
+    self.value = value
+
 def simple_parse(token_list):
   stack = None
   index = 0
@@ -22,12 +27,21 @@ def simple_parse(token_list):
     index
   return stack
 
+def indent_tokens(token_list):
+  stack = []
+  indent = 0
+  for tkn in token_list:
+    if tkn.kind == TokenKind.LBRACKET or tkn.kind == TokenKind.LBRACE:
+      stack.append(tkn)
+  print(stack)
+
+
 
 def main():
   json_chr_list = list(json_data)
   pre_tokens = get_tokens(json_chr_list)
   json_tokens = get_lexer(pre_tokens)
-
+  indent_tokens(json_tokens)
   return json_tokens, simple_parse(json_tokens)
 
 
