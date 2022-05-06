@@ -20,7 +20,23 @@ def set_key_value(key, value):
 # 
 
 
+class Node:
+  def __init__(self):
+    self.left: str
+    self.obj: str
+    self.right: str
+    self.children: Node
+
+
 def simple_parse(token_list):
+  indent_deep(token_list)
+  deep = 0
+  index = 0
+  for _ in range(len(token_list)):
+    tkn = token_list[index]
+    if tkn.deep:
+      deep = tkn.deep
+      index += 1
   stack = None
   index = 0
   for _ in range(len(token_list)):
