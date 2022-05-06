@@ -9,6 +9,7 @@ class Token:
   def __init__(self, kind, value=None):
     self.kind = kind
     self.value = value
+    self.deep = None
 
   def __eq__(self, other):
     if not isinstance(other, Token):
