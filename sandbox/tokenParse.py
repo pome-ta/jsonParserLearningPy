@@ -21,12 +21,40 @@ def set_key_value(key, value):
 
 
 class Node:
-  def __init__(self):
-    self.left: str
-    self.obj: str
-    self.right: str
-    self.children: Node
+  def __init__(self, left, objs, right, children=None):
+    self.left: str = left
+    self.objs: str = objs
+    self.right: str = right
+    self.children: Node = children
 
+  def select_type(self):
+    if self.left == '{':
+      self.core_stack = {}
+    if self.left == '[':
+      self.core_stack = []
+
+  def set_objs(self):
+    pass
+
+
+def setup(lists, types, indeep):
+  if types == TokenKind.LBRACKET:
+    pass
+  if types == TokenKind.LBRACE:
+    pass
+
+
+def set_key(lists):
+  pass
+
+
+# dict_key
+# dict_value
+#   dict_key
+#   list_value
+# list_value
+#   dict_key
+#   list_value
 
 def simple_parse(token_list):
   indent_deep(token_list)
