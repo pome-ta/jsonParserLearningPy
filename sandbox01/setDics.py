@@ -1,3 +1,4 @@
+'''
 sample_str = '{"hoge": "fuga"}'
 
 s_lbr = '{'
@@ -10,3 +11,8 @@ s_rbr = '}'
 dic = {'piyo': 'baa'}
 obj_dic = {s_key: s_value}
 dic.update(obj_dic)
+'''
+
+dic1 = {}
+dic2 = {}
+dic1.update(**dic2)
