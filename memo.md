@@ -8,6 +8,41 @@
 
 
 
+## JSON BNF
+
+```
+json = object;
+object = LBRACE RBRACE | LBRACE {pair {COMMA pair} RBRACE;
+pair = STRING COLON value;
+array = LBRACKET RBRACKET | LBRACKET {value {COMMA value}} RBRACKET ;
+value = STRING | NUMBER | object | array | TRUE | FALSE | NULL ;
+
+STRING = ("\"\"" / "\"" CHAR+ "\"") S;
+NUMBER = (INT FRAC EXP | INT EXP | INT FRAC | INT) S;
+TRUE = "true" S ;
+FALSE = "false" S;
+NULL = "null" S;
+COMMA = "," S;
+COLON = ":" S;
+LBRACE = "{" S;
+RBRACE = "}" S;
+LBRACKET = "[" S;
+RBRACKET = "]" S;
+
+S = ( [ \f\t\r\n]+
+  | "/*" (!"*/" _)* "*/"
+    / "//" (![\r\n] _)* [\r\n]
+    )* ;
+
+CHAR = (!(["\\]) _) | "\\" [\\"/bfnrt] | "u" HEX HEX HEX HEX ;
+HEX = `[0-9a-fA-F]` ;
+INT = ["-"] (`[1-9]` {`[0-9]`} / "0") ;
+FRAC = "." [0-9]+ ;
+EXP = e `[0-9]` {`[0-9]`} ;
+E = "e+" | "e-" | "E+" | "E-" | "e" | "E" ;
+```
+
+
 
 # 📝 2022/05/04
 
