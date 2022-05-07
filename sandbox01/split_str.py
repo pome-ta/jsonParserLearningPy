@@ -1,10 +1,11 @@
-#import json
+# import json
 
 json_data = '[{"nam e": "Taro", "age": 14, "check": true}, {"name": "Jiro", "age": 23, "check": false}, {"name": "Tom", "age": 16, "check": false}, {"name": null, "age": 14, "check": null}]'
 
 json_chr_list = list(json_data)
 
-#j = json.loads(json_data)
+
+# j = json.loads(json_data)
 
 
 # `"`
@@ -47,8 +48,8 @@ def pending_tokens(json_str):
   return tokens
 
 
-#token_list = pending_tokens(json_chr_list)
-#print(len(json_chr_list))
+# token_list = pending_tokens(json_chr_list)
+# print(len(json_chr_list))
 '''
 for indx in range(len(json_chr_list)):
   if json_chr_list[indx] == 't':
@@ -89,11 +90,10 @@ for _ in range(str_length):
   if index >= str_length:
     break
   element = json_chr_list[index]
-  
+
   if element.isspace():
     index += 1
     continue
-  
 
   if element in symbols:
     tokens.append(element)
@@ -111,7 +111,7 @@ for _ in range(str_length):
     tokens.append(''.join(cut_top_list[:5]))
     index += 5
     continue
-    
+
   if element == 'n':
     cut_top_list = json_chr_list[index:]
     tokens.append(''.join(cut_top_list[:4]))
@@ -130,4 +130,3 @@ for _ in range(str_length):
     continue
 
   index += 1
-

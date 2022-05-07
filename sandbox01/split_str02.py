@@ -19,6 +19,7 @@ json_data = r'''{
 }
 '''
 
+
 # json_data = '[{"nam e": "Taro", "age": 14, "check": true}, {"name": "Jiro", "age": 23, "check": false}, {"name": "Tom", "age": 16, "check": false}, {"name": null, "age": 14, "check": null}]'
 
 
@@ -31,7 +32,7 @@ def get_strings_step(tail_list):
       if quotation_flag: break
       quotation_flag = True
   str_value = ''.join(tail_list[:n + 1])
-  return (str_value, len(str_value))
+  return str_value, len(str_value)
 
 
 def get_numbers_step(tail_list):
@@ -39,7 +40,7 @@ def get_numbers_step(tail_list):
   for n, number in enumerate(tail_list):
     if number in end: break
   num_value = ''.join(tail_list[:n])
-  return (num_value, len(num_value))
+  return num_value, len(num_value)
 
 
 def get_tokens(str_list):
@@ -102,10 +103,9 @@ def get_tokens(str_list):
 if __name__ == '__main__':
   from pprint import pprint
 
-  #json_path = Path('./sandbox/sample01.json')
+  # json_path = Path('./sandbox/sample01.json')
   json_path = Path('./sample01.json')
   json_data = json_path.read_text(encoding='utf-8')
   json_chr_list = list(json_data)
   json_tokens = get_tokens(json_chr_list)
   print(json_tokens)
-
