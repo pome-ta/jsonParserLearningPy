@@ -1,3 +1,14 @@
+# 📝 2022/05/07
+
+分割はできたけども、オブジェクト化するのがゴタゴタしてる
+
+[asciidwango / parser_book](https://github.com/asciidwango/parser_book/blob/master/SUMMARY.md)
+
+これ読んでみる
+
+
+
+
 # 📝 2022/05/04
 
 
