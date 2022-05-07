@@ -13,3 +13,6 @@
 
 
 [JSONの字句解析器みたいなもの PickledChair/json_token.py](https://gist.github.com/PickledChair/77b5a06d18f7274a0761f3ea26851911)
+
+
+[構文解析の本 | asciidwango / parser_book](https://github.com/asciidwango/parser_book)
