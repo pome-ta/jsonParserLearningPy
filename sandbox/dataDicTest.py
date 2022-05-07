@@ -6,6 +6,5 @@ for key, val in data_dict.items():
 data_list = list(range(10))
 data_list[2] = list(range(5))
 
-data_list = [[0, [1,2,3], 0], [0, [1,2,3], 0]]
-
+data_list = [[0, [1, 2, 3], 0], [0, [1, 2, 3], 0]]
 
