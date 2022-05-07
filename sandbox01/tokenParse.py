@@ -107,7 +107,8 @@ def main():
   json_chr_list = list(json_data)
   pre_tokens = get_tokens(json_chr_list)
   json_tokens = get_lexer(pre_tokens)
-  #indent_deep(json_tokens)
+  for tkn in json_tokens:
+    print(tkn)
 
   return json_tokens, simple_parse(json_tokens)
 
@@ -117,6 +118,7 @@ if __name__ == '__main__':
   from pathlib import Path
 
   json_path = Path('./sample01.json')
+  json_path = Path('./sandbox01/sample01.json')
   json_data = json_path.read_text(encoding='utf-8')
   json_data = '[{"nam e": "Taro", "age": 14, "check": true}, {"name": "Jiro", "age": 23, "check": false}, {"name": "Tom", "age": 16, "check": false}, {"name": null, "age": 14, "check": null}]'
   jjj, jptree = main()
