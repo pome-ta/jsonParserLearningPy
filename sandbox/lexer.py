@@ -16,27 +16,10 @@ class Token:
       return NotImplemented
     return self.kind == other.kind and self.value == other.value
 
+  def __str__(self):
+    return str(self.value)
 
-'''
-    def __str__(self):
-      if self.kind == TokenKind.LBRACKET:
-        return '['
-      elif self.kind == TokenKind.LBRACE:
-        return '{'
-      elif self.kind == TokenKind.COLON:
-        return ':'
-      elif self.kind == TokenKind.COMMA:
-        return ','
-      elif self.kind == TokenKind.RBRACE:
-        return '}'
-      elif self.kind == TokenKind.RBRACKET:
-        return ']'
-      elif self.kind == TokenKind.STRING:
-        return str(self.value)
-      else:
-        return str(self.value)
 
-'''
 
 
 # xxx: 2回回して無駄だけど取り敢えず
