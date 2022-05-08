@@ -3,49 +3,24 @@ from split_str02 import get_tokens
 from lexer import get_lexer
 
 
-class DictNode:
-  def __init__(self, key, value):
-    self.key = key
+class ListObj:
+  def __init__(self, lists):
+    self.lists = lists
+
+
+class DictObj:
+  def __init__(self, *pair):
+    self.pair = {*pair}
+
+
+class Pair:
+  def __init__(self, str, colon, value):
+    self.str = str
+    self.colon = colon
     self.value = value
 
-
-def set_value(value):
-  pass
-
-
-def set_key_value(key, value):
-  pass
-
-
-# 
-
-
-class Node:
-  def __init__(self, left, objs, right, children=None):
-    self.left: str = left
-    self.objs: str = objs
-    self.right: str = right
-    self.children: Node = children
-
-  def select_type(self):
-    if self.left == '{':
-      self.core_stack = {}
-    if self.left == '[':
-      self.core_stack = []
-
-  def set_objs(self):
-    pass
-
-
-def setup(lists, types, indeep):
-  if types == TokenKind.LBRACKET:
-    pass
-  if types == TokenKind.LBRACE:
-    pass
-
-
-def set_key(lists):
-  pass
+  def dict(self):
+    return {self.str: self.value}
 
 
 def simple_parse(token_list):
@@ -91,26 +66,25 @@ def indent_deep(token_list):
       stack.append(ele)
       tkn.deep = deep
 
-  pprint(stack)
+  #pprint(stack)
   #return stack
 
+  # dict_key
+  # dict_value
+  #   dict_key
+  #   list_value
+  # list_value
+  #   dict_key
+  #   list_value
 
-# dict_key
-# dict_value
-#   dict_key
-#   list_value
-# list_value
-#   dict_key
-#   list_value
 
-
-def set_deep_list(lists):
+def get_deep_list(lists):
   pool = []
   for index in range(len(lists)):
     if lists[index].deep:
-      print(index, lists[index].deep)
+      #print(index, lists[index].deep)
       pool.append([index, lists[index].deep])
-      
+
   search = [p for p in pool]
   stack = []
   for i in range(len(pool)):
@@ -125,19 +99,11 @@ def set_deep_list(lists):
         stack.append([i_d[0], s_id[0]])
         search[si] = None
         pool[si] = None
-        
         break
-    
-        
-  print(stack)
+  #print(stack)
   #print(search)
-    
-    
-    
-    
-    
-    
-      
+  return stack
+
 
 def setup_dictkey(lists):
   for index in range(len(lists)):
@@ -154,7 +120,8 @@ def set_json(lists):
   for _ in range(len(lists)):
     tkn = lists[index]
     # todo: 辞書か配列にある前提
-    if 0 == index and (tkn.kind == TokenKind.LBRACE or tkn.kind == TokenKind.LBRACKET):
+    if 0 == index and (tkn.kind == TokenKind.LBRACE or
+                       tkn.kind == TokenKind.LBRACKET):
       if tkn.kind == TokenKind.LBRACE:
         stack = dict()
       if tkn.kind == TokenKind.LBRACKET:
@@ -166,13 +133,16 @@ def set_json(lists):
   return stack
 
 
-
-class JsonParser:
-  pass
-
-
-class PyAst:
-  pass
+def list_dic(t_lists, d_lists):
+  print(d_lists)
+  s, e = d_lists[1]
+  print(t_lists[s])
+  print('/---')
+  for i in t_lists[s:e]:
+    print(i)
+  print('---/')
+  if t_lists[s].kind == TokenKind.LBRACE:
+    pass
 
 
 def main():
@@ -181,7 +151,8 @@ def main():
   json_tokens = get_lexer(pre_tokens)
   indent_deep(json_tokens)
   setup_dictkey(json_tokens)
-  set_deep_list(json_tokens)
+  deep_list = get_deep_list(json_tokens)
+  list_dic(json_tokens, deep_list)
 
   return json_tokens, set_json(json_tokens)
 
