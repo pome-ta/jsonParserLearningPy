@@ -77,7 +77,7 @@ def simple_parse(token_list):
 
 
 def indent_deep(token_list):
-  deep = 0
+  deep = 1
   stack = []
   for tkn in token_list:
     if tkn.kind == TokenKind.LBRACKET or tkn.kind == TokenKind.LBRACE:
@@ -103,6 +103,41 @@ def indent_deep(token_list):
 #   dict_key
 #   list_value
 
+
+def set_deep_list(lists):
+  pool = []
+  for index in range(len(lists)):
+    if lists[index].deep:
+      print(index, lists[index].deep)
+      pool.append([index, lists[index].deep])
+      
+  search = [p for p in pool]
+  stack = []
+  for i in range(len(pool)):
+    i_d = pool[i]
+    if i_d == None: continue
+    #if len(set(search)) <= 1: break
+    search[i] = None
+    pool[i] = None
+    for si in range(len(pool)):
+      s_id = search[si]
+      if s_id and s_id[1] == i_d[1]:
+        stack.append([i_d[0], s_id[0]])
+        search[si] = None
+        pool[si] = None
+        
+        break
+    
+        
+  print(stack)
+  #print(search)
+    
+    
+    
+    
+    
+    
+      
 
 def setup_dictkey(lists):
   for index in range(len(lists)):
@@ -131,12 +166,22 @@ def set_json(lists):
   return stack
 
 
+
+class JsonParser:
+  pass
+
+
+class PyAst:
+  pass
+
+
 def main():
   json_chr_list = list(json_data)
   pre_tokens = get_tokens(json_chr_list)
   json_tokens = get_lexer(pre_tokens)
   indent_deep(json_tokens)
   setup_dictkey(json_tokens)
+  set_deep_list(json_tokens)
 
   return json_tokens, set_json(json_tokens)
 

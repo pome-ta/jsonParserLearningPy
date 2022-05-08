@@ -16,3 +16,12 @@ dic.update(obj_dic)
 dic1 = {}
 dic2 = {}
 dic1.update(**dic2)
+
+lll = [[1,2],[4,2],[1,5]]
+#llr = [l for l in lll]
+llr = lll
+llr[2] = 'a'
+
+
+set(lll)
+

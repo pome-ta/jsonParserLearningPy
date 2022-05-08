@@ -3,6 +3,19 @@
   "C": "\u3042",
   "key0": "screwsat",
   "key1": 10,
+  "hoge": [1, 2, {"piyo": null},{"foo": true, "bar": false}, 4, null, "togatoga"],
+  "fuga": {
+    "akey5": {
+      "akey1": [1, 2, 3, 4, null, "togatoga"],
+      "akey2": "あいうえお",
+      "akey3": "\" \\ / \b \f \n \r \t"
+    },
+    "bkey5": {
+      "bkey1": [1, 2, 3, 4, null, "togatoga"],
+      "bkey2": "あいうえお",
+      "bkey3": "\" \\ / \b \f \n \r \t"
+    }
+  },
   "key2": true,
   "key3": false,
   "key4": null,
