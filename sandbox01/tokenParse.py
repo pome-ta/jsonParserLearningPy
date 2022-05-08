@@ -106,6 +106,7 @@ def indent_deep(token_list):
 
 def setup_dictkey(lists):
   for index in range(len(lists)):
+    lists[index].type = None
     if lists[index].kind == TokenKind.COLON:
       lists[index - 1].type = 'dict_key'
 
@@ -115,6 +116,14 @@ def set_json(lists):
   index = 0
   for _ in range(len(lists)):
     tkn = lists[index]
+    # todo: 辞書か配列にある前提
+    if 0 == index and (tkn.kind == TokenKind.LBRACE or tkn.kind == TokenKind.LBRACKET):
+      if tkn.kind == TokenKind.LBRACE:
+        stack = dict()
+      if tkn.kind == TokenKind.LBRACKET:
+        stack = list()
+    if tkn.type == 'dict_key':
+      print(tkn)
     index += 1
 
   return stack
