@@ -33,5 +33,5 @@ class Hoge:
     self.lis = lis
 
 
-hoge = Hoge('a')
+hoge = Hoge([{'a': 1}, {'b':2}])
 

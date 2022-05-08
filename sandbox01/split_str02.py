@@ -75,7 +75,7 @@ def get_tokens(str_list):
 
     if element == 'n':
       # xxx: `null` 確認
-      tokens.append(''.join(str_list[index:index + 5]))
+      tokens.append(''.join(str_list[index:index + 4]))
       index += 4
       continue
 

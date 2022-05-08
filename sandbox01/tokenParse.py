@@ -6,11 +6,18 @@ from lexer import get_lexer
 class ListObj:
   def __init__(self, lists):
     self.lists = lists
+    self.values = []
+    self.set_values()
+    
+  def set_values(self):
+    for i in self.lists:
+      #print(i)
+      i
 
 
 class DictObj:
-  def __init__(self, *pair):
-    self.pair = {*pair}
+  def __init__(self, *pairs):
+    self.pairs = pairs
 
 
 class Pair:
@@ -82,7 +89,7 @@ def get_deep_list(lists):
   pool = []
   for index in range(len(lists)):
     if lists[index].deep:
-      #print(index, lists[index].deep)
+      print('ffff', index, lists[index].deep)
       pool.append([index, lists[index].deep])
 
   search = [p for p in pool]
@@ -133,16 +140,39 @@ def set_json(lists):
   return stack
 
 
+def set_fix_dic():
+  pass
+
+
 def list_dic(t_lists, d_lists):
+  print(d_lists)
+  for s, e in d_lists:
+    if t_lists[s].kind == TokenKind.LBRACKET:
+      pass
+    #print('------')
+    #print(s, e)
+    #print('---')
+    tkns = t_lists[s:e]
+    for i in tkns:
+      i
+      #print(i)
+  
+  s, e = d_lists[0]
+  if t_lists[s].kind == TokenKind.LBRACKET:
+    list_obj = ListObj(t_lists[s + 1: e])
+  
+  '''
   print(d_lists)
   s, e = d_lists[1]
   print(t_lists[s])
   print('/---')
   for i in t_lists[s:e]:
-    print(i)
+    i
+    #print(i)
   print('---/')
   if t_lists[s].kind == TokenKind.LBRACE:
     pass
+  '''
 
 
 def main():
@@ -166,4 +196,8 @@ if __name__ == '__main__':
   json_data = json_path.read_text(encoding='utf-8')
   #json_data = '[{"nam e": "Taro", "age": 14, "check": true}, {"name": "Jiro", "age": 23, "check": false}, {"name": "Tom", "age": 16, "check": false}, {"name": null, "age": 14, "check": null}]'
   jjj, jptree = main()
+
+  for j in jjj:
+    j
+    #print(j)
 
