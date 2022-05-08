@@ -114,6 +114,8 @@ def setup_dictkey(lists):
 def set_json(lists):
   stack = None
   index = 0
+  key = None
+  value = None
   for _ in range(len(lists)):
     tkn = lists[index]
     # todo: 辞書か配列にある前提
@@ -123,7 +125,7 @@ def set_json(lists):
       if tkn.kind == TokenKind.LBRACKET:
         stack = list()
     if tkn.type == 'dict_key':
-      print(tkn)
+      key = tkn.value
     index += 1
 
   return stack
