@@ -64,6 +64,7 @@ if __name__ == '__main__':
   with open(json_path, encoding='utf-8') as f:
     mrj = json.load(f)
   json_data = json_path.read_text(encoding='utf-8')
+  json_data = '[{"nam e": "Taro", "age": 14, "check": true}, {"name": "Jiro", "age": 23, "check": false}, {"name": "Tom", "age": 16, "check": false}, {"name": null, "age": 14, "check": null}]'
   mlj = json.loads(json_data)
   json_chr_list = list(json_data)
   pre_tokens = get_tokens(json_chr_list)
