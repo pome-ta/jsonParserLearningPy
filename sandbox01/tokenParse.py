@@ -3,33 +3,6 @@ from split_str02 import get_tokens
 from lexer import get_lexer
 
 
-class ListObj:
-  def __init__(self, lists):
-    self.lists = lists
-    self.values = []
-    self.set_values()
-    
-  def set_values(self):
-    for i in self.lists:
-      #print(i)
-      i
-
-
-class DictObj:
-  def __init__(self, *pairs):
-    self.pairs = pairs
-
-
-class Pair:
-  def __init__(self, str, colon, value):
-    self.str = str
-    self.colon = colon
-    self.value = value
-
-  def dict(self):
-    return {self.str: self.value}
-
-
 def simple_parse(token_list):
   #indent_deep(token_list)
   deep = 0
@@ -89,7 +62,7 @@ def get_deep_list(lists):
   pool = []
   for index in range(len(lists)):
     if lists[index].deep:
-      print('ffff', index, lists[index].deep)
+      #print('ffff', index, lists[index].deep)
       pool.append([index, lists[index].deep])
 
   search = [p for p in pool]
@@ -98,16 +71,16 @@ def get_deep_list(lists):
     i_d = pool[i]
     if i_d == None: continue
     #if len(set(search)) <= 1: break
+    indent = pool[i][1]
     search[i] = None
     pool[i] = None
     for si in range(len(pool)):
       s_id = search[si]
       if s_id and s_id[1] == i_d[1]:
-        stack.append([i_d[0], s_id[0]])
+        stack.append([i_d[0], s_id[0], indent])
         search[si] = None
         pool[si] = None
         break
-  #print(stack)
   #print(search)
   return stack
 
@@ -140,39 +113,34 @@ def set_json(lists):
   return stack
 
 
-def set_fix_dic():
-  pass
+class ArrayObj:
+  def __init__(self, tokens):
+    self.tokens = tokens
+
+
+class DictObj:
+  def __init__(self, tokens):
+    self.tokens = tokens
 
 
 def list_dic(t_lists, d_lists):
-  print(d_lists)
+  pool = []
+  #print(d_lists)
+  #print(t_lists)
   for s, e in d_lists:
     if t_lists[s].kind == TokenKind.LBRACKET:
-      pass
-    #print('------')
-    #print(s, e)
-    #print('---')
-    tkns = t_lists[s:e]
-    for i in tkns:
-      i
-      #print(i)
-  
-  s, e = d_lists[0]
-  if t_lists[s].kind == TokenKind.LBRACKET:
-    list_obj = ListObj(t_lists[s + 1: e])
-  
-  '''
-  print(d_lists)
-  s, e = d_lists[1]
-  print(t_lists[s])
-  print('/---')
-  for i in t_lists[s:e]:
-    i
-    #print(i)
-  print('---/')
-  if t_lists[s].kind == TokenKind.LBRACE:
-    pass
-  '''
+      pool.append(ArrayObj(t_lists[s + 1:e]))
+    if t_lists[s].kind == TokenKind.LBRACE:
+      pool.append(DictObj(t_lists[s + 1:e]))
+  return pool
+
+
+def index_list(deeps):
+  s = ''
+  for i in deeps:
+    tab = (i[2] - 1) * '\t'
+    s += tab + str(i) + '\n'
+  print(s)
 
 
 def main():
@@ -182,9 +150,10 @@ def main():
   indent_deep(json_tokens)
   setup_dictkey(json_tokens)
   deep_list = get_deep_list(json_tokens)
-  list_dic(json_tokens, deep_list)
+  index_list(deep_list)
 
-  return json_tokens, set_json(json_tokens)
+  #set_json(json_tokens)
+  return json_tokens, None  #list_dic(json_tokens, deep_list)
 
 
 if __name__ == '__main__':
@@ -194,6 +163,7 @@ if __name__ == '__main__':
   json_path = Path('./sample01.json')
   #json_path = Path('./sandbox01/sample01.json')
   json_data = json_path.read_text(encoding='utf-8')
+  #json_chr_list = list(json_data)
   #json_data = '[{"nam e": "Taro", "age": 14, "check": true}, {"name": "Jiro", "age": 23, "check": false}, {"name": "Tom", "age": 16, "check": false}, {"name": null, "age": 14, "check": null}]'
   jjj, jptree = main()
 
