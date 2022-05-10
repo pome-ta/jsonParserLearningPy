@@ -49,6 +49,7 @@ def get_deep_list(tokens):
 
     for s_index in range(len(pool)):
       s_deep = search[s_index]
+
       if s_deep and s_deep[1] == p_deep[1]:
         stack.append([p_deep[0], s_deep[0], indent])
         search[s_index] = None
@@ -64,12 +65,6 @@ def set_indent(tokens, deeps):
       tkn.indent = i
 
 
-def get_token_list(strs):
-  str_list = list(strs)
-  tokens = get_lexer(get_tokens(str_list))
-  return tokens
-
-
 def get_dicts(tokens, indent=1):
   dic_key = None
   dic_value = None
@@ -79,10 +74,13 @@ def get_dicts(tokens, indent=1):
   children_flag = False
   for tkn in tokens:
     if tkn.indent == indent:
-      if tkn.keytype:
-        dic_key = tkn.value
-      if tkn.kind == TokenKind.COLON:
-        colon_flag = True
+      dic_key = tkn.value if tkn.keytype else dic_key
+      #if tkn.keytype:
+      #  dic_key = tkn.value
+      
+      colon_flag = True if tkn.kind == TokenKind.COLON else colon_flag
+      #if tkn.kind == TokenKind.COLON:
+      #  colon_flag = True
       if tkn.kind in [TokenKind.COMMA, TokenKind.RBRACE]:
         if children_flag:
           children_flag = False
@@ -125,6 +123,12 @@ def get_lists(tokens, indent=1):
       values.append(tkn)
       children_flag = True
   return stack
+
+
+def get_token_list(strs):
+  str_list = list(strs)
+  tokens = get_lexer(get_tokens(str_list))
+  return tokens
 
 
 def get_obj(tokens):
