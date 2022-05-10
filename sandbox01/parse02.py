@@ -73,7 +73,6 @@ def get_dicts(tokens, indent=1):
       if tkn.kind == TokenKind.COLON:
         colon_flag = True
       if tkn.kind in [TokenKind.COMMA, TokenKind.RBRACE]:
-        # if tkn.kind == TokenKind.COMMA or tkn.kind == TokenKind.RBRACE:
         if children_flag:
           children_flag = False
           if values[0].kind == TokenKind.LBRACKET:
@@ -85,7 +84,6 @@ def get_dicts(tokens, indent=1):
         dic_value = None
         values = []
       if colon_flag and not (tkn.kind in [TokenKind.COMMA, TokenKind.COLON]):
-        # if colon_flag and not (tkn.kind == TokenKind.COMMA or tkn.kind == TokenKind.COLON):
         dic_value = tkn.value
     else:
       values.append(tkn)
@@ -101,7 +99,6 @@ def get_lists(tokens, indent=1):
   for tkn in tokens:
     if tkn.indent == indent:
       if tkn.kind in [TokenKind.COMMA, TokenKind.RBRACKET]:
-        # if tkn.kind == TokenKind.COMMA or tkn.kind == TokenKind.RBRACKET:
         if children_flag:
           children_flag = False
           if values[0].kind == TokenKind.LBRACKET:
@@ -112,7 +109,6 @@ def get_lists(tokens, indent=1):
         list_value = None
         values = []
       if not (tkn.kind in [TokenKind.LBRACKET, TokenKind.COMMA]):
-        # if tkn.kind != TokenKind.LBRACKET or tkn.kind != TokenKind.COMMA:
         list_value = tkn.value
     else:
       values.append(tkn)
@@ -143,7 +139,7 @@ def parse(strs):
 if __name__ == '__main__':
   from pathlib import Path
   import json
-  
+
   json_path = Path('./sample01.json')
   #json_path = Path('./sandbox01/sample01.json')
   json_data = json_path.read_text(encoding='utf-8')
