@@ -133,9 +133,11 @@ def set_keyvalue(tokens):
   indent = 1
   deep = 1
   colon_flag = False
-  pool = []
+  children_flag = False
+  pool = {}
   for index in range(len(tokens)):
     tkn = tokens[index]
+    #indent = 
     if tkn.keytype:
       indent = tkn.indent
       key = tkn.value
@@ -144,32 +146,90 @@ def set_keyvalue(tokens):
     if tkn.indent == indent and (tkn.kind == TokenKind.COMMA or
                                  tkn.kind == TokenKind.RBRACE):
       colon_flag = False
-      pool.append({key: value})
+      if children_flag:
+        value = set_keyvalue(value)
+        children_flag = False
+      pool.update({key: value})
       key = None
       value = []
     if tkn.indent == indent and colon_flag and not (
         tkn.kind == TokenKind.COMMA or tkn.kind == TokenKind.COLON):
-      value.append(tkn.value)
+      value = tkn.value
+    elif tkn.indent != indent:
+      value.append(tkn)
+      children_flag = True
 
     index += 1
   print(pool)
   a = 1
+  return pool
+
+
+def get_dicts(tokens, indent=1):
+  index = -1
+  key = None
+  values = []
+  pool = {}
+  colon_flag = False
+  children_flag = False
+  for _ in range(len(tokens)):
+    index += 1
+    tkn = tokens[index]
+    print(tkn)
+    if tkn.indent == indent:
+      if tkn.keytype:
+        key = tkn.value
+        #continue
+      if tkn.kind == TokenKind.COLON:
+        colon_flag = True
+        #continue
+      if colon_flag and not (tkn.kind == TokenKind.COMMA or
+                             tkn.kind == TokenKind.COLON):
+        values = tkn.value
+        #continue
+
+      if tkn.kind == TokenKind.COMMA:
+        if children_flag:
+          values = get_dicts(values, indent + 1)
+          children_flag = False
+        pool.update({key: values})
+        colon_flag = False
+        key = None
+        values = []
+        continue
+      if tkn.kind == TokenKind.RBRACE:
+        if children_flag:
+          values = get_dicts(values, indent + 1)
+          children_flag = False
+        pool.update({key: values})
+        colon_flag = False
+        key = None
+        values = []
+        return pool
+
+    else:
+      values.append(tkn)
+      children_flag = True
+      #continue
+  #return pool
 
 
 def main(strs):
   pre = pre_parse(strs)
   deep_list = get_deep_list(pre)
   set_indent(pre, deep_list)
-  set_keyvalue(pre)
+
   indent = max([n[2] for n in deep_list])
   sample_dict = {"hoge": "fuga", "foo": "baa"}
   a = 1
-  return None
+  return get_dicts(pre)
 
 
 if __name__ == '__main__':
   test_data = '{"hoge":"fuga","piyo":{"あ":null, "い":true, "う":false}, "foo":"baa"}'
-  # test_data = '{"hoge":"fuga", "foo": "baa"}'
+  #test_data = '{"hoge":"fuga", "foo": "baa"}'
   main = main(test_data)
+  #sample_data = {"hoge": "fuga","piyo": {"あ": "null", "い": "true","う": "false"},"foo": "baa"}
+  sample_data = {"hoge": "fuga", "foo": "baa"}
   a = 1
 
