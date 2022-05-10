@@ -10,6 +10,7 @@ class Token:
     self.kind = kind
     self.value = value
     self.deep = None
+    self.keytype = False
 
   def __eq__(self, other):
     if not isinstance(other, Token):
