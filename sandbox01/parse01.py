@@ -16,14 +16,21 @@ def set_keytype(tokens):
     if tokens[index].kind == TokenKind.COLON:
       tokens[index - 1].keytype = True
 
+def set_valuetype(tokens):
+  for index in range(len(tokens)):
+    tokens[index].valuetype = False
+    if tokens[index].kind == TokenKind.COMMA:
+      tokens[index - 1].valuetype = True
+
 
 def create_dicts(tokens):
   set_keytype(tokens)
+  set_valuetype(tokens)
   key = None
   value = None
   for tkn in tokens:
-    if tkn.kind == TokenKind.LBRACE:
-      pass
+    if tkn.keytype:
+      
 
 
 def main(strs):
