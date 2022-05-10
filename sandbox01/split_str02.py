@@ -19,7 +19,6 @@ json_data = r'''{
 }
 '''
 
-
 # json_data = '[{"nam e": "Taro", "age": 14, "check": true}, {"name": "Jiro", "age": 23, "check": false}, {"name": "Tom", "age": 16, "check": false}, {"name": null, "age": 14, "check": null}]'
 
 
@@ -109,3 +108,4 @@ if __name__ == '__main__':
   json_chr_list = list(json_data)
   json_tokens = get_tokens(json_chr_list)
   print(json_tokens)
+
