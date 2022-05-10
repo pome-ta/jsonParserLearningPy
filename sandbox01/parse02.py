@@ -98,8 +98,12 @@ def get_dicts(tokens, indent=1):
         colon_flag = True
       if tkn.kind == TokenKind.COMMA or tkn.kind == TokenKind.RBRACE:
         if children_flag:
-          values = get_dicts(values, indent + 1)
           children_flag = False
+          if values[0].kind == TokenKind.LBRACKET:
+            values = get_lists(values, indent + 1)
+          elif values[0].kind == TokenKind.LBRACE:
+            values = get_dicts(values, indent + 1)
+
         pool.update({key: values})
         colon_flag = False
         key = None
@@ -118,22 +122,60 @@ def get_dicts(tokens, indent=1):
 
 
 def get_lists(tokens, indent=1):
-  pass
+  values = []
+  pool = []
+  children_flag = False
+  for tkn in tokens:
+    #print(tkn)
+    if tkn.indent == indent:
+
+      if tkn.kind == TokenKind.COMMA or tkn.kind == TokenKind.RBRACKET:
+        if children_flag:
+          children_flag = False
+          if values[0].kind == TokenKind.LBRACKET:
+            values = get_lists(values, indent + 1)
+          elif values[0].kind == TokenKind.LBRACE:
+            values = get_dicts(values, indent + 1)
+        pool.append(values)
+        values = []
+
+      if tkn.kind != TokenKind.LBRACKET or tkn.kind != TokenKind.COMMA:
+        values = tkn.value
+
+    else:
+      values.append(tkn)
+      children_flag = True
+  return pool
+
+
+def py_parse(tokens):
+  stack = None
+  if tokens[0].kind == TokenKind.LBRACKET:
+    stack = get_lists(tokens)
+  elif tokens[0].kind == TokenKind.LBRACE:
+    stack = get_dicts(tokens)
+  return stack
 
 
 def main(strs):
   pre = pre_parse(strs)
   deep_list = get_deep_list(pre)
   set_indent(pre, deep_list)
-  r = get_dicts(pre)
+  r = py_parse(pre)
   indent = max([n[2] for n in deep_list])
-  sample_dict = {"hoge": "fuga", "foo": "baa"}
+  
   a = 1
   return r
 
 
 if __name__ == '__main__':
-  test_data = '{"hoge":"fuga","piyo":{"あ":null, "い":true, "う":false}, "foo":"baa"}'
+  from pathlib import Path
+
+  json_path = Path('./sample01.json')
+  #json_path = Path('./sandbox01/sample01.json')
+  json_data = json_path.read_text(encoding='utf-8')
+  #test_data = '{"hoge":"fuga","piyo":{"あ":null, "い":true, "う":false}, "foo":"baa"}'
+  test_data = '{"hoge":"fuga","piyo":{"あ":null, "い":true, "う":false}, "list":[1,2,4],"foo":"baa"}'
   #test_data = '{"hoge":"fuga", "foo": "baa"}'
   main = main(test_data)
   #sample_data = {"hoge": "fuga","piyo": {"あ": "null", "い": "true","う": "false"},"foo": "baa"}
