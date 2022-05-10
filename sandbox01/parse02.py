@@ -3,39 +3,50 @@ from split_str02 import get_tokens
 from lexer import get_lexer
 
 
-def set_deep(tokens):
+def setup_deep(tkn, indeep):
+  if tkn.kind in [TokenKind.LBRACE, TokenKind.LBRACKET]:
+    tkn.deep = indeep
+    indeep += 1
+  if tkn.kind in [TokenKind.RBRACE, TokenKind.RBRACKET]:
+    indeep -= 1
+    tkn.deep = indeep
+  return indeep
+
+
+def setup_keytype(f_tkn, s_tkn):
+  if s_tkn and s_tkn.kind == TokenKind.COLON:
+    f_tkn.keytype = True
+
+
+def set_attributes(tokens):
   deep = 1
-  for tkn in tokens:
-    if tkn.kind in [TokenKind.LBRACE, TokenKind.LBRACKET]:
-      tkn.deep = deep
-      deep += 1
-    if tkn.kind in [TokenKind.RBRACE, TokenKind.RBRACKET]:
-      deep -= 1
-      tkn.deep = deep
-
-
-def set_keytype(tokens):
   for index in range(len(tokens)):
-    tokens[index].keytype = False
-    if tokens[index].kind == TokenKind.COLON:
-      tokens[index - 1].keytype = True
+    next_tkn = tokens[index + 1] if index + 1 < len(tokens) else None
+
+    setup_keytype(tokens[index], next_tkn)
+    deep = setup_deep(tokens[index], deep)
 
 
 def get_deep_list(tokens):
   pool = []
+
   for n, tkn in enumerate(tokens):
     if tkn.deep:
       pool.append([n, tkn.deep])
 
   search = [p for p in pool]
   stack = []
+
   for p_index in range(len(pool)):
     p_deep = pool[p_index]
+
     if p_deep == None:
       continue
+
     indent = pool[p_index][1]
     search[p_index] = None
     pool[p_index] = None
+
     for s_index in range(len(pool)):
       s_deep = search[s_index]
       if s_deep and s_deep[1] == p_deep[1]:
@@ -127,10 +138,12 @@ def get_obj(tokens):
 
 def parse(strs):
   token_list = get_token_list(strs)
-  set_deep(token_list)
-  set_keytype(token_list)
+  set_attributes(token_list)
   deep_list = get_deep_list(token_list)
   set_indent(token_list, deep_list)
+  for i in token_list:
+    #print(f'indent->{i.indent} deep->{i.deep} \t{i.value}')
+    pass
   obj = get_obj(token_list)
   a = 1
   return obj
