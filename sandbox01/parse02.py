@@ -56,15 +56,6 @@ def get_deep_list(tokens):
   return stack
 
 
-def pre_parse(strs):
-  str_list = list(strs)
-  tokens = get_tokens(str_list)
-  lexer = get_lexer(tokens)
-  indent_deep(lexer)
-  set_keytype(lexer)
-  return lexer
-
-
 """
 階層ができた
 key 情報は持っている
@@ -111,6 +102,7 @@ def get_dicts(tokens, indent=1):
 
       if colon_flag and not (tkn.kind == TokenKind.COMMA or
                              tkn.kind == TokenKind.COLON):
+
         values = tkn.value
         # continue
 
@@ -122,25 +114,27 @@ def get_dicts(tokens, indent=1):
 
 
 def get_lists(tokens, indent=1):
+  value = None
   values = []
   pool = []
   children_flag = False
   for tkn in tokens:
-    #print(tkn)
     if tkn.indent == indent:
 
       if tkn.kind == TokenKind.COMMA or tkn.kind == TokenKind.RBRACKET:
+        #print(tkn)
         if children_flag:
           children_flag = False
           if values[0].kind == TokenKind.LBRACKET:
-            values = get_lists(values, indent + 1)
+            value = get_lists(values, indent + 1)
           elif values[0].kind == TokenKind.LBRACE:
-            values = get_dicts(values, indent + 1)
-        pool.append(values)
+            value = get_dicts(values, indent + 1)
+        pool.append(value)
+        value = None
         values = []
 
       if tkn.kind != TokenKind.LBRACKET or tkn.kind != TokenKind.COMMA:
-        values = tkn.value
+        value = tkn.value
 
     else:
       values.append(tkn)
@@ -157,13 +151,22 @@ def py_parse(tokens):
   return stack
 
 
+def pre_parse(strs):
+  str_list = list(strs)
+  tokens = get_tokens(str_list)
+  lexer = get_lexer(tokens)
+  indent_deep(lexer)
+  set_keytype(lexer)
+  return lexer
+
+
 def main(strs):
   pre = pre_parse(strs)
   deep_list = get_deep_list(pre)
   set_indent(pre, deep_list)
   r = py_parse(pre)
-  indent = max([n[2] for n in deep_list])
-  
+  #indent = max([n[2] for n in deep_list])
+
   a = 1
   return r
 
@@ -177,7 +180,8 @@ if __name__ == '__main__':
   #test_data = '{"hoge":"fuga","piyo":{"あ":null, "い":true, "う":false}, "foo":"baa"}'
   test_data = '{"hoge":"fuga","piyo":{"あ":null, "い":true, "う":false}, "list":[1,2,4],"foo":"baa"}'
   #test_data = '{"hoge":"fuga", "foo": "baa"}'
-  main = main(test_data)
+  mmain = main(test_data)
+  #mmain = main(json_data)
   #sample_data = {"hoge": "fuga","piyo": {"あ": "null", "い": "true","う": "false"},"foo": "baa"}
   sample_data = {"hoge": "fuga", "foo": "baa"}
   a = 1
