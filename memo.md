@@ -14,7 +14,9 @@ Pythonista 内のと
 
 - `raise`
   - エラー発生さす
-
+- 正規表現
+  - `FLAGS = re.VERBOSE | re.MULTILINE | re.DOTALL`
+    - ビット演算でフラグ管理してる
 
 
 
