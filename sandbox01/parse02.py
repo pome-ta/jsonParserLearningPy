@@ -1,3 +1,5 @@
+import re
+
 from tokenTypes import TokenKind
 from split_str02 import get_tokens
 from lexer import get_lexer
@@ -65,6 +67,18 @@ def set_indent(tokens, deeps):
       tkn.indent = i
 
 
+def convert_value(tkn):
+  if tkn.kind == TokenKind.BOOLEAN:
+    value = True if re.search(r't', tkn.value) else False
+  elif tkn.kind == TokenKind.NULL:
+    value = None
+  elif tkn.kind == TokenKind.NUMBER:
+    value = float(tkn.value) if re.search(r'[\.|e|E]', tkn.value) else int(tkn.value)
+  else:
+    value = str(tkn.value)
+  return value
+    
+
 def get_dicts(tokens, indent=1):
   dic_key = None
   dic_value = None
@@ -88,12 +102,15 @@ def get_dicts(tokens, indent=1):
             dic_value = get_lists(values, indent + 1)
           elif values[0].kind == TokenKind.LBRACE:
             dic_value = get_dicts(values, indent + 1)
+          
         stack.update({dic_key: dic_value})
         dic_key = None
         dic_value = None
         values = []
       if colon_flag and not (tkn.kind in [TokenKind.COMMA, TokenKind.COLON]):
-        dic_value = tkn.value
+        dic_value = convert_value(tkn)
+        #dic_value = tkn.value
+        
     else:
       values.append(tkn)
       children_flag = True
@@ -160,7 +177,8 @@ if __name__ == '__main__':
   json_path = Path('./sample01.json')
   #json_path = Path('./sandbox01/sample01.json')
   json_data = json_path.read_text(encoding='utf-8')
-  sample = json.loads(json_data)
+  dsample = json.loads(json_data)
   dump = parse(json_data)
+  
   a = 1
 
