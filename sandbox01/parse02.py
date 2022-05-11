@@ -135,7 +135,7 @@ def get_lists(tokens, indent=1):
         list_value = None
         values = []
       if not (tkn.kind in [TokenKind.LBRACKET, TokenKind.COMMA]):
-        list_value = tkn.value
+        list_value = convert_value(tkn)
     else:
       values.append(tkn)
       children_flag = True
@@ -174,11 +174,14 @@ if __name__ == '__main__':
   from pathlib import Path
   import json
 
-  json_path = Path('./sample01.json')
+  #json_path = Path('./sample01.json')
+  json_path = Path('./sample02.json')
   #json_path = Path('./sandbox01/sample01.json')
   json_data = json_path.read_text(encoding='utf-8')
   dsample = json.loads(json_data)
   dump = parse(json_data)
+  
+  print(dsample == dump)
   
   a = 1
 
