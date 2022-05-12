@@ -28,7 +28,7 @@ class Token:
 
 
 # xxx: 無駄？
-def get_symbol_dict():
+def _get_symbol_dict()->dict:
   return {
     '[': Token(TokenType.L_BRACKET, None),
     ']': Token(TokenType.R_BRACKET, None),
@@ -39,7 +39,17 @@ def get_symbol_dict():
   }
 
 
-flag_symbols = get_symbol_dict().keys()
+
+def _get_bool2null_dict()->dict:
+  return {
+    't': Token(TokenType.BOOLEAN, None),
+    'f': Token(TokenType.BOOLEAN, None),
+    'n': Token(TokenType.NULL, None),
+  }
+
+
+flag_symbols = _get_symbol_dict().keys()
+flag_bool2null = _get_bool2null_dict().keys()
 
 
 def _switch_token(c: str, i: int) -> tuple:
@@ -47,8 +57,14 @@ def _switch_token(c: str, i: int) -> tuple:
   if c.isspace():
     return tkn, i + 1, tail
   if c in flag_symbols:
-    tkn = get_symbol_dict()[c]
+    tkn = _get_symbol_dict()[c]
     return tkn, i + 1, tail
+  if c in flag_bool2null:
+    tkn = _get_bool2null_dict()[c]
+    
+
+def _check_bool2null(v: str):
+  pass
 
 
 def get_tokens(strs: str, index: int=0) -> list:
@@ -60,7 +76,9 @@ def get_tokens(strs: str, index: int=0) -> list:
     if index >= length: break
     tkn, next_index, tail = _switch_token(char_list[index], index)
     if tkn:
-      tkn.value = char_list[index:tail] if tail else char_list[index]
+      value = char_list[index:tail] if tail else char_list[index]
+      
+      tkn.value = value
       _append(tkn)
     index = next_index
   return tokens
