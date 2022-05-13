@@ -45,11 +45,6 @@ bools2null_dict = {
   'n': 'null',
 }
 
-flag_symbols = _get_symbol_dict().keys()
-flag_bool2null = bools2null_dict.keys()
-# xxx: `e`, `E` は不要？
-flag_numbers = [*(lambda: [str(n) for n in range(10)])(), '.', '-', 'e', 'E']
-
 
 def _get_strings_step(tail_list: list) -> tuple:
   quotation_flag = False
@@ -76,11 +71,12 @@ def _get_numbers_step(tail_list):
 def _get_bools2null_step(value_list: list) -> tuple:
   bool_null = ''.join(value_list)
   if bool_null == bools2null_dict[value_list[0]]:
+    # xxx 長すぎー？
     tkn = Token(TokenType.NULL, bool_null) if bool_null == 'null' else Token(
       TokenType.BOOLEAN, bool_null)
 
   else:
-    raise Exception
+    raise Exception(f'bool or null typeError: {bool_null}')
   return tkn, len(bool_null)
 
 
@@ -88,6 +84,11 @@ def get_tokens(strs: str) -> list:
   char_list = list(strs)
   length = char_list.__len__()
   tokens = []
+
+  flag_symbols = _get_symbol_dict().keys()
+  flag_bool2null = bools2null_dict.keys()
+  # xxx: `e`, `E` は不要？
+  flag_numbers = [*(lambda: [str(n) for n in range(10)])(), '.', '-', 'e', 'E']
 
   index = 0
   for _ in range(length):
@@ -123,7 +124,7 @@ def get_tokens(strs: str) -> list:
 if __name__ == '__main__':
   from pathlib import Path
 
-  json_path = Path('./sample01.json')
+  json_path = Path('./sample03.json')
   json_str = json_path.read_text(encoding='utf-8')
   t = Token(TokenType.COLON, ':')
   main = get_tokens(json_str)
