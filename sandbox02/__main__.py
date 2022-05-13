@@ -40,26 +40,13 @@ def _get_symbol_dict() -> dict:
   }
 
 
-def _get_bool2null_dict() -> dict:
-  return {
-    't': Token(TokenType.BOOLEAN, 'true'),
-    'f': Token(TokenType.BOOLEAN, 'false'),
-    'n': Token(TokenType.NULL, 'null'),
-  }
-
 
 flag_symbols = _get_symbol_dict().keys()
-flag_bool2null = _get_bool2null_dict().keys()
+flag_bool2null = ['t', 'f', 'n']
 zero2nine_strs = [str(n) for n in range(10)]
 # xxx: `e`, `E` は不要かな？
 flag_numbers = [*zero2nine_strs, '.', '-', 'e', 'E']
 
-
-def _check_bool2null(chars: str, value: str) -> None:
-  if not (chars == value):
-    # xxx: エラー処理
-    raise Exception
-    print(f'error!: {chars}')
 
 
 def _get_strings_step(tail_list: list) -> tuple:
@@ -70,7 +57,6 @@ def _get_strings_step(tail_list: list) -> tuple:
       if quotation_flag: break
       quotation_flag = True
   str_value = ''.join(tail_list[:n + 1])
-  #return str_value, len(str_value)
   return Token(TokenType.STRING, str_value), len(str_value)
 
 
@@ -80,12 +66,10 @@ def _get_numbers_step(tail_list):
   for n, number in enumerate(tail_list):
     if number in end: break
   num_value = ''.join(tail_list[:n])
-  #return num_value, len(num_value)
   return Token(TokenType.NUMBER, num_value), len(num_value)
 
 
 def _get_bools2null_step(value_list: list) -> tuple:
-  print(value_list)
   bool_null = ''.join(value_list)
   if bool_null == 'true':
     tkn = Token(TokenType.BOOLEAN, bool_null)
