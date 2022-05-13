@@ -74,10 +74,9 @@ def _get_numbers_step(tail_list):
 def _get_bools2null_step(value_list: list) -> tuple:
   bool_null = ''.join(value_list)
   if bool_null == bools2null_dict[value_list[0]]:
-    if bool_null == 'null':
-      tkn = Token(TokenType.NULL, bool_null)
-    else:
-      tkn = Token(TokenType.BOOLEAN, bool_null)
+    tkn = Token(TokenType.NULL, bool_null) if bool_null == 'null' else Token(
+      TokenType.BOOLEAN, bool_null)
+
   else:
     raise Exception
   return tkn, len(bool_null)
