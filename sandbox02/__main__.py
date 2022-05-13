@@ -58,6 +58,7 @@ flag_numbers = [*zero2nine_strs, '.', '-', 'e', 'E']
 def _check_bool2null(chars: str, value: str) -> None:
   if not (chars == value):
     # xxx: エラー処理
+    raise Exception
     print(f'error!: {chars}')
 
 
@@ -79,6 +80,27 @@ def _get_numbers_step(tail_list):
     if number in end: break
   num_value = ''.join(tail_list[:n])
   return num_value, len(num_value)
+
+# xxx: `for` するから遅くなる？
+def _get_bools2null_step(tail_list: list) -> tuple:
+  
+  for string in tail_list:
+    step = 5 if string == 'f' else 4
+    if string == 't':
+      bool_null = ''.join(tail_list[:step])
+      if bool_null == 'true': raise Exception
+    elif string == 'f':
+      bool_null = ''.join(tail_list[:step])
+      if bool_null == 'false': raise Exception
+    elif string == 'n':
+      bool_null = ''.join(tail_list[:step])
+      if bool_null == 'null': raise Exception
+    else:
+      raise Exception
+        
+      
+  
+
 
 
 def get_tokens(strs: str) -> list:
@@ -116,6 +138,7 @@ def get_tokens(strs: str) -> list:
 
     # xxx: エラー処理
     else:
+      raise Exception
       print(f'error!: {char}')
     index += add_index
     tokens.append(tkn)
