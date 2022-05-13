@@ -58,8 +58,10 @@ def _get_strings_step(tail_list: list) -> tuple:
       if n and tail_list[n - 1] == '\\': continue
       if quotation_flag: break
       quotation_flag = True
-  str_value = ''.join(tail_list[:n + 1])
-  return Token(TokenType.STRING, str_value), len(str_value)
+  str_list = tail_list[:n + 1]
+  # xxx: エスケープやら文字エンコードなど
+  str_value = ''.join(str_list[1:n])
+  return Token(TokenType.STRING, str_value), len(str_list)
 
 
 def _get_numbers_step(tail_list):
@@ -121,7 +123,7 @@ def get_tokens(strs: str) -> list:
 if __name__ == '__main__':
   from pathlib import Path
 
-  json_path = Path('./sample02.json')
+  json_path = Path('./sample01.json')
   json_str = json_path.read_text(encoding='utf-8')
   t = Token(TokenType.COLON, ':')
   main = get_tokens(json_str)
