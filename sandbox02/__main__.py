@@ -117,11 +117,35 @@ def get_tokens(strs: str) -> list:
   return tokens
 
 
+def _setup_nest(tkn: Token, nest: int) -> int:
+  if tkn.type in [TokenType.L_BRACE, TokenType.L_BRACKET]:
+    tkn.nest = nest
+    nest += 1
+  if tkn.type in [TokenType.R_BRACE, TokenType.R_BRACKET]:
+    nest -= 1
+    tkn.nest = nest
+  return nest
 
+
+def _setup_objkey(f_tkn: Token, s_tkn: Token) -> None:
+  if s_tkn and s_tkn.type == TokenType.COLON:
+    f_tkn.obj_key = True
+
+
+def _set_attributes(tokens) -> None:
+  length = tokens.__len__()
+
+  nest = 0
+  for index in range(length):
+    now_tkn = tokens[index]
+    nest = _setup_nest(now_tkn, nest)
+    next_tkn = tokens[index + 1] if index + 1 < length else None
+    _setup_objkey(now_tkn, next_tkn)
 
 
 def parse(strs: str):
   token_list = get_tokens(strs)
+  _set_attributes(token_list)
   return token_list
 
 
@@ -131,5 +155,5 @@ if __name__ == '__main__':
   json_path = Path('./sample02.json')
   json_str = json_path.read_text(encoding='utf-8')
   t = Token(TokenType.COLON, ':')
-  main = get_tokens(json_str)
+  main = parse(json_str)
 
