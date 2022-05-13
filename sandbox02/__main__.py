@@ -70,7 +70,8 @@ def _get_strings_step(tail_list: list) -> tuple:
       if quotation_flag: break
       quotation_flag = True
   str_value = ''.join(tail_list[:n + 1])
-  return str_value, len(str_value)
+  #return str_value, len(str_value)
+  return Token(TokenType.STRING, str_value), len(str_value)
 
 
 def _get_numbers_step(tail_list):
@@ -79,28 +80,22 @@ def _get_numbers_step(tail_list):
   for n, number in enumerate(tail_list):
     if number in end: break
   num_value = ''.join(tail_list[:n])
-  return num_value, len(num_value)
+  #return num_value, len(num_value)
+  return Token(TokenType.NUMBER, num_value), len(num_value)
 
-# xxx: `for` するから遅くなる？
-def _get_bools2null_step(tail_list: list) -> tuple:
-  
-  for string in tail_list:
-    step = 5 if string == 'f' else 4
-    if string == 't':
-      bool_null = ''.join(tail_list[:step])
-      if bool_null == 'true': raise Exception
-    elif string == 'f':
-      bool_null = ''.join(tail_list[:step])
-      if bool_null == 'false': raise Exception
-    elif string == 'n':
-      bool_null = ''.join(tail_list[:step])
-      if bool_null == 'null': raise Exception
-    else:
-      raise Exception
-        
-      
-  
 
+def _get_bools2null_step(value_list: list) -> tuple:
+  print(value_list)
+  bool_null = ''.join(value_list)
+  if bool_null == 'true':
+    tkn = Token(TokenType.BOOLEAN, bool_null)
+  elif bool_null == 'false':
+    tkn = Token(TokenType.BOOLEAN, bool_null)
+  elif bool_null == 'null':
+    tkn = Token(TokenType.NULL, bool_null)
+  else:
+    raise Exception
+  return tkn, len(bool_null)
 
 
 def get_tokens(strs: str) -> list:
@@ -122,19 +117,14 @@ def get_tokens(strs: str) -> list:
       add_index = 1
 
     elif char in flag_bool2null:
-      # xxx: ちゃんと入ってから返してあげるべき？
-      tkn = _get_bool2null_dict()[char]
-      add_index = 5 if char == 'f' else 4
-      bool_or_null = ''.join(char_list[index:index + add_index])
-      _check_bool2null(bool_or_null, tkn.value)
+      tkn, add_index = _get_bools2null_step(
+        char_list[index:index + 5 if char == 'f' else index + 4])
 
     elif char == '"':
-      value, add_index = _get_strings_step(char_list[index:])
-      tkn = Token(TokenType.STRING, value)
+      tkn, add_index = _get_strings_step(char_list[index:])
 
     elif char in flag_numbers:
-      value, add_index = _get_numbers_step(char_list[index:])
-      tkn = Token(TokenType.NUMBER, value)
+      tkn, add_index = _get_numbers_step(char_list[index:])
 
     # xxx: エラー処理
     else:
