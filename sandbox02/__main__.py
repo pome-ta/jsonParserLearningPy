@@ -109,7 +109,7 @@ def get_tokens(strs: str) -> list:
       tkn, add_index = _get_strings_step(char_list[index:])
     elif char in flag_numbers:
       tkn, add_index = _get_numbers_step(char_list[index:])
-    
+
     else:  # xxx: エラー処理
       raise Exception(f'Token error: {char}')
     index += add_index
@@ -135,40 +135,67 @@ def _setup_objkey(f_tkn: Token, s_tkn: Token) -> None:
 def _set_attributes(tokens) -> None:
   length = tokens.__len__()
 
-  nest_num = 0
+  nest_num = 1  # xxx `if` 処理の`Falsy(0)` 回避のため
   for index in range(length):
     now_tkn = tokens[index]
     nest_num = _setup_nest(now_tkn, nest_num)
     next_tkn = tokens[index + 1] if index + 1 < length else None
     _setup_objkey(now_tkn, next_tkn)
-  
-  if nest_num != 0:  # xxx: エラー処理
+
+  if nest_num != 1:  # xxx: エラー処理
     raise Exception('nest error: nest panic')
 
 
-def _get_nest_list(tokens: list) -> list:
-  nest_list = []
-  
-  pool = []
+def _get_index2indent_dict(tokens: list) -> list:
+  index_indent_list = []
   for index, tkn in enumerate(tokens):
     if tkn.nest:
-      pool.append([index, tkn.nest])
-  
+      index_indent_list.append({'index': index, 'indent': tkn.nest})
+  return index_indent_list
+
+
+def _get_nest2indent_list(tokens: list) -> list:
+  # xxx: `index` と、`indent` が紛らわしい？
+  nest_indent_list = []
+
+  pool = _get_index2indent_dict(tokens)
   ref = [p for p in pool]
-  p_length = pool.__len__()
-  
-  for p_index in range(p_length):
-    p_nest = pool[p_index]
-    if p_nest == None: continue
-    indent = pool[p_index][1]
-    pool[index] = None
-    
-  
+
+  length = pool.__len__()
+  for open_index in range(length):
+    open_nest = pool[open_index]
+    if open_nest == None: continue
+    indent_num = pool[open_index]['indent']
+    pool[open_index] = None
+    ref[open_index] = None
+
+    for close_index in range(length):
+      close_nest = ref[close_index]
+
+      if close_nest and open_nest['indent'] == close_nest['indent']:
+        nest_indent_list.append(
+          [open_nest['index'], close_nest['index'], indent_num])
+        ref[close_index] = None
+        pool[close_index] = None
+        break
+
+  if len(set(pool + ref)) != 1:
+    raise Exception('indent error: indent panic')
+  return nest_indent_list
+
+
+def _set_indent(tokens: list, nests: list) -> None:
+  for o, c, i in nests:
+    ext_tokens = tokens[o:c + 1]
+    for tkn in ext_tokens:
+      tkn.indent = i
 
 
 def parse(strs: str):
   token_list = get_tokens(strs)
   _set_attributes(token_list)
+  nest_indent_list = _get_nest2indent_list(token_list)
+  _set_indent(token_list, nest_indent_list)
   return token_list
 
 
