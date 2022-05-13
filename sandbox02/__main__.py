@@ -47,11 +47,8 @@ bools2null_dict = {
 
 flag_symbols = _get_symbol_dict().keys()
 flag_bool2null = bools2null_dict.keys()
-zero2nine_strs = [str(n) for n in range(10)]
-
-#flag_numbers = [*zero2nine_strs, '.', '-', 'e', 'E']
 # xxx: `e`, `E` は不要？
-flag_numbers = [*(lambda : [str(n) for n in range(10)])(), '.', '-', 'e', 'E']
+flag_numbers = [*(lambda: [str(n) for n in range(10)])(), '.', '-', 'e', 'E']
 
 
 def _get_strings_step(tail_list: list) -> tuple:
@@ -81,7 +78,8 @@ def _get_bools2null_step(value_list: list) -> tuple:
       tkn = Token(TokenType.NULL, bool_null)
     else:
       tkn = Token(TokenType.BOOLEAN, bool_null)
-  else: raise Exception
+  else:
+    raise Exception
   return tkn, len(bool_null)
 
 
@@ -114,7 +112,8 @@ def get_tokens(strs: str) -> list:
       tkn, add_index = _get_numbers_step(char_list[index:])
 
     # xxx: エラー処理
-    else: raise Exception
+    else:
+      raise Exception
     index += add_index
     tokens.append(tkn)
   return tokens
