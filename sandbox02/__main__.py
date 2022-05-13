@@ -28,25 +28,30 @@ class Token:
 
 
 # xxx: 無駄？
-# xxx: 同じものとして担保してない、、、？
-def _get_symbol_dict() -> dict:
+def _get_symbol_dict(value: str=None) -> dict:
   return {
-    '[': Token(TokenType.L_BRACKET, '['),
-    ']': Token(TokenType.R_BRACKET, ']'),
-    '{': Token(TokenType.L_BRACE, '{'),
-    '}': Token(TokenType.R_BRACE, '}'),
-    ':': Token(TokenType.COLON, ':'),
-    ',': Token(TokenType.COMMA, ','),
+    '[': Token(TokenType.L_BRACKET, value),
+    ']': Token(TokenType.R_BRACKET, value),
+    '{': Token(TokenType.L_BRACE, value),
+    '}': Token(TokenType.R_BRACE, value),
+    ':': Token(TokenType.COLON, value),
+    ',': Token(TokenType.COMMA, value),
   }
 
 
+bools2null_dict = {
+  't': 'true',
+  'f': 'false',
+  'n': 'null',
+}
 
 flag_symbols = _get_symbol_dict().keys()
-flag_bool2null = ['t', 'f', 'n']
+flag_bool2null = bools2null_dict.keys()
 zero2nine_strs = [str(n) for n in range(10)]
-# xxx: `e`, `E` は不要かな？
-flag_numbers = [*zero2nine_strs, '.', '-', 'e', 'E']
 
+#flag_numbers = [*zero2nine_strs, '.', '-', 'e', 'E']
+# xxx: `e`, `E` は不要？
+flag_numbers = [*(lambda : [str(n) for n in range(10)])(), '.', '-', 'e', 'E']
 
 
 def _get_strings_step(tail_list: list) -> tuple:
@@ -71,14 +76,12 @@ def _get_numbers_step(tail_list):
 
 def _get_bools2null_step(value_list: list) -> tuple:
   bool_null = ''.join(value_list)
-  if bool_null == 'true':
-    tkn = Token(TokenType.BOOLEAN, bool_null)
-  elif bool_null == 'false':
-    tkn = Token(TokenType.BOOLEAN, bool_null)
-  elif bool_null == 'null':
-    tkn = Token(TokenType.NULL, bool_null)
-  else:
-    raise Exception
+  if bool_null == bools2null_dict[value_list[0]]:
+    if bool_null == 'null':
+      tkn = Token(TokenType.NULL, bool_null)
+    else:
+      tkn = Token(TokenType.BOOLEAN, bool_null)
+  else: raise Exception
   return tkn, len(bool_null)
 
 
@@ -97,7 +100,7 @@ def get_tokens(strs: str) -> list:
       continue  # 空白は早々に棄却
 
     if char in flag_symbols:
-      tkn = _get_symbol_dict()[char]
+      tkn = _get_symbol_dict(char)[char]
       add_index = 1
 
     elif char in flag_bool2null:
@@ -111,9 +114,7 @@ def get_tokens(strs: str) -> list:
       tkn, add_index = _get_numbers_step(char_list[index:])
 
     # xxx: エラー処理
-    else:
-      raise Exception
-      print(f'error!: {char}')
+    else: raise Exception
     index += add_index
     tokens.append(tkn)
   return tokens
