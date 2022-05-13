@@ -59,7 +59,7 @@ def _get_strings_step(tail_list: list) -> tuple:
   return Token(TokenType.STRING, str_value), len(str_list)
 
 
-def _get_numbers_step(tail_list):
+def _get_numbers_step(tail_list: list) -> tuple:
   # xxx: `10,000` みたいな表現できない
   end = [',', '}', ']', '\n']
   for n, number in enumerate(tail_list):
@@ -102,17 +102,13 @@ def get_tokens(strs: str) -> list:
     if char in flag_symbols:
       tkn = _get_symbol_dict(char)[char]
       add_index = 1
-
     elif char in flag_bool2null:
       tkn, add_index = _get_bools2null_step(
         char_list[index:index + 5 if char == 'f' else index + 4])
-
     elif char == '"':
       tkn, add_index = _get_strings_step(char_list[index:])
-
     elif char in flag_numbers:
       tkn, add_index = _get_numbers_step(char_list[index:])
-
     # xxx: エラー処理
     else:
       raise Exception
@@ -121,10 +117,18 @@ def get_tokens(strs: str) -> list:
   return tokens
 
 
+
+
+
+def parse(strs: str):
+  token_list = get_tokens(strs)
+  return token_list
+
+
 if __name__ == '__main__':
   from pathlib import Path
 
-  json_path = Path('./sample03.json')
+  json_path = Path('./sample02.json')
   json_str = json_path.read_text(encoding='utf-8')
   t = Token(TokenType.COLON, ':')
   main = get_tokens(json_str)
