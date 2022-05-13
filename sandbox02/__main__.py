@@ -75,7 +75,7 @@ def _get_bools2null_step(value_list: list) -> tuple:
     tkn = Token(TokenType.NULL, bool_null) if bool_null == 'null' else Token(
       TokenType.BOOLEAN, bool_null)
 
-  else:
+  else:  # xxx: エラー処理
     raise Exception(f'bool or null typeError: {bool_null}')
   return tkn, len(bool_null)
 
@@ -109,9 +109,9 @@ def get_tokens(strs: str) -> list:
       tkn, add_index = _get_strings_step(char_list[index:])
     elif char in flag_numbers:
       tkn, add_index = _get_numbers_step(char_list[index:])
-    # xxx: エラー処理
-    else:
-      raise Exception
+    
+    else:  # xxx: エラー処理
+      raise Exception(f'Token error: {char}')
     index += add_index
     tokens.append(tkn)
   return tokens
@@ -135,12 +135,35 @@ def _setup_objkey(f_tkn: Token, s_tkn: Token) -> None:
 def _set_attributes(tokens) -> None:
   length = tokens.__len__()
 
-  nest = 0
+  nest_num = 0
   for index in range(length):
     now_tkn = tokens[index]
-    nest = _setup_nest(now_tkn, nest)
+    nest_num = _setup_nest(now_tkn, nest_num)
     next_tkn = tokens[index + 1] if index + 1 < length else None
     _setup_objkey(now_tkn, next_tkn)
+  
+  if nest_num != 0:  # xxx: エラー処理
+    raise Exception('nest error: nest panic')
+
+
+def _get_nest_list(tokens: list) -> list:
+  nest_list = []
+  
+  pool = []
+  for index, tkn in enumerate(tokens):
+    if tkn.nest:
+      pool.append([index, tkn.nest])
+  
+  ref = [p for p in pool]
+  p_length = pool.__len__()
+  
+  for p_index in range(p_length):
+    p_nest = pool[p_index]
+    if p_nest == None: continue
+    indent = pool[p_index][1]
+    pool[index] = None
+    
+  
 
 
 def parse(strs: str):
