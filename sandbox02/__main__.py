@@ -105,17 +105,18 @@ def get_tokens(strs: str) -> list:
       add_index = 5 if char == 'f' else 4
       bool_or_null = ''.join(char_list[index:index + add_index])
       _check_bool2null(bool_or_null, tkn.value)
-      
+
     elif char == '"':
       value, add_index = _get_strings_step(char_list[index:])
       tkn = Token(TokenType.STRING, value)
-      
+
     elif char in flag_numbers:
       value, add_index = _get_numbers_step(char_list[index:])
       tkn = Token(TokenType.NUMBER, value)
-    
+
     # xxx: エラー処理
-    else: print(f'error!: {char}')
+    else:
+      print(f'error!: {char}')
     index += add_index
     tokens.append(tkn)
   return tokens
