@@ -264,6 +264,7 @@ def _get_arrays(tokens: list, indent: int) -> list:
 
 def _get_json_obj(tokens: list, indent: int=1) -> dict:
   objs = None
+  # todo: 再帰呼び出し開始
   if tokens[0].token_type == TokenType.L_BRACKET:
     objs = _get_arrays(tokens, indent)
   elif tokens[0].token_type == TokenType.L_BRACE:
