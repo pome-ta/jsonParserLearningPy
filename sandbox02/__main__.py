@@ -206,5 +206,5 @@ if __name__ == '__main__':
 
   json_path = Path('./sample02.json')
   json_str = json_path.read_text(encoding='utf-8')
-  t = Token(TokenType.COLON, ':')
   main = parse(json_str)
+  
