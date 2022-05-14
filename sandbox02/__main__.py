@@ -1,3 +1,4 @@
+import re
 from enum import Enum, auto
 from typing import Optional
 
@@ -17,7 +18,7 @@ class TokenType(Enum):
 
 
 class Token:
-  def __init__(self, token_type: TokenType, value: str = None):
+  def __init__(self, token_type: TokenType, value: str=None):
     self.token_type: TokenType = token_type
     self.value: str = value
     self.obj_key: bool = False
@@ -29,7 +30,7 @@ class Token:
 
 
 # xxx: 無駄？
-def _get_symbol_dict(value: str = None) -> dict:
+def _get_symbol_dict(value: str=None) -> dict:
   return {
     '[': Token(TokenType.L_BRACKET, value),
     ']': Token(TokenType.R_BRACKET, value),
@@ -57,7 +58,7 @@ def _get_strings_step(tail_list: list) -> tuple:
         break
       quotation_flag = True
   str_list = tail_list[:n + 1]
-  str_value = ''.join(str_list[1:n])    # xxx: エスケープやら文字エンコードなど
+  str_value = ''.join(str_list[1:n])  # xxx: エスケープやら文字エンコードなど
   return Token(TokenType.STRING, str_value), len(str_list)
 
 
@@ -89,7 +90,9 @@ def get_tokens(strs: str) -> list:
 
   flag_symbols = _get_symbol_dict().keys()
   flag_bool2null = bools2null_dict.keys()
-  flag_numbers = [*(lambda: [str(n) for n in range(10)])(), '.', '-', 'e', 'E']   # xxx: `e`, `E` は不要？
+  flag_numbers = [
+    *(lambda: [str(n) for n in range(10)])(), '.', '-', 'e', 'E'
+  ]  # xxx: `e`, `E` は不要？
 
   index = 0
   for _ in range(length):
@@ -157,8 +160,7 @@ def _get_index2indent_dict(tokens: list) -> list:
 
 
 def _get_nest2indent_list(tokens: list) -> list:
-  nest_indent_list = []   # xxx: `index` と、`indent` が紛らわしい？
-
+  nest_indent_list = []  # xxx: `index` と、`indent` が紛らわしい？
   pool = _get_index2indent_dict(tokens)
   ref = [p for p in pool]
 
@@ -181,7 +183,7 @@ def _get_nest2indent_list(tokens: list) -> list:
         pool[close_index] = None
         break
 
-  if len(set(pool + ref)) != 1:
+  if len(set(pool + ref)) != 1:  # xxx: エラー処理
     raise Exception('indent error: indent panic')
   return nest_indent_list
 
@@ -193,12 +195,89 @@ def _set_indent(tokens: list, nests: list) -> None:
       tkn.indent = i
 
 
+def _convert_value(tkn: Token) -> None:  # xxx: type
+  if tkn.token_type == TokenType.BOOLEAN:
+    value = True if re.search(r't', tkn.value) else False
+  elif tkn.token_type == TokenType.NULL:
+    value = None
+  elif tkn.token_type == TokenType.NUMBER:
+    value = float(tkn.value) if re.search(r'[\.|e|E]',
+                                          tkn.value) else int(tkn.value)
+  else:
+    value = str(tkn.value)
+  return value
+
+
+def _get_dicts(tokens: list, indent: int) -> dict:
+  dic_key = None
+  dic_value = None
+  values = []
+  dicts = {}
+  colon_flag = False
+  children_flag = False
+  for tkn in tokens:
+    if tkn.indent == indent:
+      dic_key = tkn.value if tkn.obj_key else dic_key
+
+      colon_flag = True if tkn.token_type == TokenType.COLON else colon_flag
+
+      if tkn.token_type in [TokenType.COMMA, TokenType.R_BRACE]:
+        if children_flag:
+          children_flag = False
+          dic_value = _get_json_obj(values, indent + 1)
+
+        dicts.update({dic_key: dic_value})
+        dic_key = None
+        dic_value = None
+        values = []
+      if colon_flag and not (
+          tkn.token_type in [TokenType.COMMA, TokenType.COLON]):
+        dic_value = _convert_value(tkn)
+
+    else:
+      values.append(tkn)
+      children_flag = True
+  return dicts
+
+
+def _get_arrays(tokens: list, indent: int) -> list:
+  array_value = None
+  values = []
+  arrays = []
+  children_flag = False
+  for tkn in tokens:
+    if tkn.indent == indent:
+      if tkn.token_type in [TokenType.COMMA, TokenType.R_BRACKET]:
+        if children_flag:
+          children_flag = False
+          array_value = _get_json_obj(values, indent + 1)
+        arrays.append(array_value)
+        array_value = None
+        values = []
+      if not (tkn.token_type in [TokenType.L_BRACKET, TokenType.COMMA]):
+        array_value = _convert_value(tkn)
+    else:
+      values.append(tkn)
+      children_flag = True
+  return arrays
+
+
+def _get_json_obj(tokens: list, indent: int=1) -> dict:
+  objs = None
+  if tokens[0].token_type == TokenType.L_BRACKET:
+    objs = _get_arrays(tokens, indent)
+  elif tokens[0].token_type == TokenType.L_BRACE:
+    objs = _get_dicts(tokens, indent)
+  return objs
+
+
 def parse(strs: str):
   token_list = get_tokens(strs)
   _set_attributes(token_list)
   nest_indent_list = _get_nest2indent_list(token_list)
   _set_indent(token_list, nest_indent_list)
-  return token_list
+  json_objs = _get_json_obj(token_list)
+  return json_objs
 
 
 if __name__ == '__main__':
@@ -207,4 +286,4 @@ if __name__ == '__main__':
   json_path = Path('./sample02.json')
   json_str = json_path.read_text(encoding='utf-8')
   main = parse(json_str)
-  
+

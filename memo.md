@@ -1,3 +1,24 @@
+# 📝 2022/05/14
+
+Pycharm 先生に怒られてる
+
+```
+class TokenType(Enum):
+  NUMBER = auto()  # 数値
+  STRING = auto()  # 文字列
+  BOOLEAN = auto()  # true or false
+  NULL = auto()  # null
+
+  L_BRACKET = auto()  # [
+  R_BRACKET = auto()  # ]
+  L_BRACE = auto()  # {
+  R_BRACE = auto()  # }
+  COLON = auto()  # :
+  COMMA = auto()  # ,
+
+```
+
+
 # 📝 2022/05/12
 
 
