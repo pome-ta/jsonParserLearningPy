@@ -1,4 +1,5 @@
 from enum import Enum, auto
+from typing import Optional
 
 
 class TokenType(Enum):
@@ -16,19 +17,19 @@ class TokenType(Enum):
 
 
 class Token:
-  def __init__(self, type, value=None):
-    self.type: TokenType = type
+  def __init__(self, token_type: TokenType, value: str = None):
+    self.token_type: TokenType = token_type
     self.value: str = value
     self.obj_key: bool = False
-    self.nest: int = None
-    self.indent: int = None
+    self.nest: Optional[int] = None
+    self.indent: Optional[int] = None
 
   def __str__(self):
     return str(self.value)
 
 
 # xxx: 無駄？
-def _get_symbol_dict(value: str=None) -> dict:
+def _get_symbol_dict(value: str = None) -> dict:
   return {
     '[': Token(TokenType.L_BRACKET, value),
     ']': Token(TokenType.R_BRACKET, value),
@@ -50,20 +51,21 @@ def _get_strings_step(tail_list: list) -> tuple:
   quotation_flag = False
   for n, string in enumerate(tail_list):
     if string == '"':
-      if n and tail_list[n - 1] == '\\': continue
-      if quotation_flag: break
+      if n and tail_list[n - 1] == '\\':
+        continue
+      if quotation_flag:
+        break
       quotation_flag = True
   str_list = tail_list[:n + 1]
-  # xxx: エスケープやら文字エンコードなど
-  str_value = ''.join(str_list[1:n])
+  str_value = ''.join(str_list[1:n])    # xxx: エスケープやら文字エンコードなど
   return Token(TokenType.STRING, str_value), len(str_list)
 
 
 def _get_numbers_step(tail_list: list) -> tuple:
-  # xxx: `10,000` みたいな表現できない
-  end = [',', '}', ']', '\n']
+  end = [',', '}', ']', '\n']  # xxx: `10,000` みたいな表現できない
   for n, number in enumerate(tail_list):
-    if number in end: break
+    if number in end:
+      break
   num_value = ''.join(tail_list[:n])
   return Token(TokenType.NUMBER, num_value), len(num_value)
 
@@ -87,12 +89,12 @@ def get_tokens(strs: str) -> list:
 
   flag_symbols = _get_symbol_dict().keys()
   flag_bool2null = bools2null_dict.keys()
-  # xxx: `e`, `E` は不要？
-  flag_numbers = [*(lambda: [str(n) for n in range(10)])(), '.', '-', 'e', 'E']
+  flag_numbers = [*(lambda: [str(n) for n in range(10)])(), '.', '-', 'e', 'E']   # xxx: `e`, `E` は不要？
 
   index = 0
   for _ in range(length):
-    if index >= length: break
+    if index >= length:
+      break
     char = char_list[index]
 
     if char.isspace():
@@ -118,17 +120,17 @@ def get_tokens(strs: str) -> list:
 
 
 def _setup_nest(tkn: Token, nest: int) -> int:
-  if tkn.type in [TokenType.L_BRACE, TokenType.L_BRACKET]:
+  if tkn.token_type in [TokenType.L_BRACE, TokenType.L_BRACKET]:
     tkn.nest = nest
     nest += 1
-  if tkn.type in [TokenType.R_BRACE, TokenType.R_BRACKET]:
+  if tkn.token_type in [TokenType.R_BRACE, TokenType.R_BRACKET]:
     nest -= 1
     tkn.nest = nest
   return nest
 
 
 def _setup_objkey(f_tkn: Token, s_tkn: Token) -> None:
-  if s_tkn and s_tkn.type == TokenType.COLON:
+  if s_tkn and s_tkn.token_type == TokenType.COLON:
     f_tkn.obj_key = True
 
 
@@ -155,8 +157,7 @@ def _get_index2indent_dict(tokens: list) -> list:
 
 
 def _get_nest2indent_list(tokens: list) -> list:
-  # xxx: `index` と、`indent` が紛らわしい？
-  nest_indent_list = []
+  nest_indent_list = []   # xxx: `index` と、`indent` が紛らわしい？
 
   pool = _get_index2indent_dict(tokens)
   ref = [p for p in pool]
@@ -164,7 +165,8 @@ def _get_nest2indent_list(tokens: list) -> list:
   length = pool.__len__()
   for open_index in range(length):
     open_nest = pool[open_index]
-    if open_nest == None: continue
+    if open_nest is None:
+      continue
     indent_num = pool[open_index]['indent']
     pool[open_index] = None
     ref[open_index] = None
@@ -206,4 +208,3 @@ if __name__ == '__main__':
   json_str = json_path.read_text(encoding='utf-8')
   t = Token(TokenType.COLON, ':')
   main = parse(json_str)
-
