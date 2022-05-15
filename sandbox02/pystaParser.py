@@ -102,7 +102,7 @@ def get_tokens(strs: str) -> list:
   flag_numbers = [
     *(lambda: [str(n) for n in range(10)])(), '.', '-', 'e', 'E'
   ]  # xxx: `e`, `E` は不要？
-
+  pre_tkn = None
   index = 0
   for _ in range(length):
     if index >= length:
