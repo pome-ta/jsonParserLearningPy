@@ -2,8 +2,8 @@ import re
 from enum import Enum, auto
 from typing import Optional
 
-
 __all__ = ['parse', 'get_tokens']
+
 
 class TokenType(Enum):
   NUMBER = auto()  # 数値
@@ -292,5 +292,4 @@ if __name__ == '__main__':
   main_json = parse(json_str)
   main_sample = json.loads(json_str)
   print(main_json == main_sample)
-
 
