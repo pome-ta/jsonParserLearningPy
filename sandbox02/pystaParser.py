@@ -43,6 +43,23 @@ def _get_symbol_dict(value: str=None) -> dict:
   }
 
 
+def _switch_symbol_dict(value: str):
+  if value == '[':
+    tkn = Token(TokenType.L_BRACKET, value)
+  elif value == ']':
+    tkn = Token(TokenType.R_BRACKET, value)
+  elif value == '{':
+    tkn = Token(TokenType.L_BRACE, value)
+  elif value == '}':
+    tkn = Token(TokenType.R_BRACE, value)
+  elif value == ':':
+    tkn = Token(TokenType.COLON, value)
+  elif value == ',':
+    tkn = Token(TokenType.COMMA, value)
+  else:
+    raise Exception(f'symbol typeError: {value}')
+  return tkn
+
 bools2null_dict = {
   't': 'true',
   'f': 'false',
@@ -107,7 +124,8 @@ def get_tokens(strs: str) -> list:
       continue  # 空白は早々に棄却
 
     if char in flag_symbols:
-      tkn = _get_symbol_dict(char)[char]
+      #tkn = _get_symbol_dict(char)[char]
+      tkn = _switch_symbol_dict(char)
       add_index = 1
     elif char in flag_bool2null:
       tkn, add_index = _get_bools2null_step(
