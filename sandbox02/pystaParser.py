@@ -31,19 +31,8 @@ class Token:
     return str(self.value)
 
 
-# xxx: 無駄？
-def _get_symbol_dict(value: str=None) -> dict:
-  return {
-    '[': Token(TokenType.L_BRACKET, value),
-    ']': Token(TokenType.R_BRACKET, value),
-    '{': Token(TokenType.L_BRACE, value),
-    '}': Token(TokenType.R_BRACE, value),
-    ':': Token(TokenType.COLON, value),
-    ',': Token(TokenType.COMMA, value),
-  }
 
-
-def _switch_symbol_dict(value: str):
+def _switch_symbol_token(value: str):
   if value == '[':
     tkn = Token(TokenType.L_BRACKET, value)
   elif value == ']':
@@ -59,6 +48,7 @@ def _switch_symbol_dict(value: str):
   else:
     raise Exception(f'symbol typeError: {value}')
   return tkn
+
 
 bools2null_dict = {
   't': 'true',
@@ -107,7 +97,7 @@ def get_tokens(strs: str) -> list:
   length = char_list.__len__()
   tokens = []
 
-  flag_symbols = _get_symbol_dict().keys()
+  flag_symbols = ['[', ']', '{', '}', ':', ',']
   flag_bool2null = bools2null_dict.keys()
   flag_numbers = [
     *(lambda: [str(n) for n in range(10)])(), '.', '-', 'e', 'E'
@@ -125,7 +115,7 @@ def get_tokens(strs: str) -> list:
 
     if char in flag_symbols:
       #tkn = _get_symbol_dict(char)[char]
-      tkn = _switch_symbol_dict(char)
+      tkn = _switch_symbol_token(char)
       add_index = 1
     elif char in flag_bool2null:
       tkn, add_index = _get_bools2null_step(
