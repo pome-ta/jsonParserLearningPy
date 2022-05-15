@@ -1,26 +1,26 @@
 import re
-from enum import Enum, auto
+from enum import Enum  # , auto
 from typing import Optional
 
 __all__ = ['parse', 'get_tokens']
 
 
 class TokenType(Enum):
-  NUMBER = auto()  # 数値
-  STRING = auto()  # 文字列
-  BOOLEAN = auto()  # true or false
-  NULL = auto()  # null
+  NUMBER = 1  # auto()  # 数値
+  STRING = 2  # auto()  # 文字列
+  BOOLEAN = 3  # auto()  # true or false
+  NULL = 4  # auto()  # null
 
-  L_BRACKET = auto()  # [
-  R_BRACKET = auto()  # ]
-  L_BRACE = auto()  # {
-  R_BRACE = auto()  # }
-  COLON = auto()  # :
-  COMMA = auto()  # ,
+  L_BRACKET = 5  # auto()  # [
+  R_BRACKET = 6  # auto()  # ]
+  L_BRACE = 7  # auto()  # {
+  R_BRACE = 8  # auto()  # }
+  COLON = 9  # auto()  # :
+  COMMA = 10  # auto()  # ,
 
 
 class Token:
-  def __init__(self, token_type: TokenType, value: str=None):
+  def __init__(self, token_type: TokenType, value: str = None):
     self.token_type: TokenType = token_type
     self.value: str = value
     self.obj_key: bool = False
@@ -31,8 +31,7 @@ class Token:
     return str(self.value)
 
 
-
-def _switch_symbol_token(value: str):
+def _switch_symbol_token(value: str) -> Token:
   if value == '[':
     tkn = Token(TokenType.L_BRACKET, value)
   elif value == ']':
@@ -58,25 +57,29 @@ bools2null_dict = {
 
 
 def _get_strings_step(tail_list: list) -> tuple:
+  index = 0
   quotation_flag = False
   for n, string in enumerate(tail_list):
+    index = n
     if string == '"':
       if n and tail_list[n - 1] == '\\':
         continue
       if quotation_flag:
         break
       quotation_flag = True
-  str_list = tail_list[:n + 1]
-  str_value = ''.join(str_list[1:n])  # xxx: エスケープやら文字エンコードなど
+  str_list = tail_list[:index + 1]
+  str_value = ''.join(str_list[1:index])  # xxx: エスケープやら文字エンコードなど
   return Token(TokenType.STRING, str_value), len(str_list)
 
 
 def _get_numbers_step(tail_list: list) -> tuple:
   end = [',', '}', ']', '\n']  # xxx: `10,000` みたいな表現できない
+  index = 0
   for n, number in enumerate(tail_list):
+    index = n
     if number in end:
       break
-  num_value = ''.join(tail_list[:n])
+  num_value = ''.join(tail_list[:index])
   return Token(TokenType.NUMBER, num_value), len(num_value)
 
 
@@ -114,7 +117,6 @@ def get_tokens(strs: str) -> list:
       continue  # 空白は早々に棄却
 
     if char in flag_symbols:
-      #tkn = _get_symbol_dict(char)[char]
       tkn = _switch_symbol_token(char)
       add_index = 1
     elif char in flag_bool2null:
@@ -205,14 +207,13 @@ def _set_indent(tokens: list, nests: list) -> None:
       tkn.indent = i
 
 
-def _convert_value(tkn: Token) -> None:  # xxx: type
+def _convert_value(tkn: Token) -> Optional:  # xxx: type
   if tkn.token_type == TokenType.BOOLEAN:
     value = True if re.search(r't', tkn.value) else False
   elif tkn.token_type == TokenType.NULL:
     value = None
   elif tkn.token_type == TokenType.NUMBER:
-    value = float(tkn.value) if re.search(r'[\.|e|E]',
-                                          tkn.value) else int(tkn.value)
+    value = float(tkn.value) if re.search(r'[.|eE]', tkn.value) else int(tkn.value)
   else:
     value = str(tkn.value)
   return value
@@ -240,8 +241,7 @@ def _get_dicts(tokens: list, indent: int) -> dict:
         dic_key = None
         dic_value = None
         values = []
-      if colon_flag and not (
-          tkn.token_type in [TokenType.COMMA, TokenType.COLON]):
+      if colon_flag and not (tkn.token_type in [TokenType.COMMA, TokenType.COLON]):
         dic_value = _convert_value(tkn)
 
     else:
@@ -272,9 +272,8 @@ def _get_arrays(tokens: list, indent: int) -> list:
   return arrays
 
 
-def _get_json_obj(tokens: list, indent: int=1) -> dict:
-  objs = None
-  # todo: 再帰呼び出し開始
+def _get_json_obj(tokens: list, indent: int = 1) -> dict:
+  objs = None  # memo: 再帰呼び出し開始
   if tokens[0].token_type == TokenType.L_BRACKET:
     objs = _get_arrays(tokens, indent)
   elif tokens[0].token_type == TokenType.L_BRACE:
@@ -300,4 +299,3 @@ if __name__ == '__main__':
   main_json = parse(json_str)
   main_sample = json.loads(json_str)
   print(main_json == main_sample)
-
