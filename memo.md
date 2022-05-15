@@ -38,84 +38,86 @@ file name: sample04.json
 
 `cProfile` というのを[見つけた](https://docs.python.org/ja/3.6/library/profile.html)
 
-```
-         295170 function calls (292866 primitive calls) in 1.129 seconds
 
-   Ordered by: standard name
+`run` の引数で、`sort=1` を指定すると`Ordered by: internal time`
+
+```
+         295170 function calls (292866 primitive calls) in 1.130 seconds
+
+   Ordered by: internal time
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1    0.001    0.001    1.129    1.129 <string>:1(<module>)
-        8    0.000    0.000    0.000    0.000 enum.py:266(__call__)
-        8    0.000    0.000    0.000    0.000 enum.py:516(__new__)
-        4    0.000    0.000    0.000    0.000 enum.py:802(__and__)
-    20993    0.011    0.000    0.011    0.000 pystaParser.py:127(_setup_nest)
-    20993    0.004    0.000    0.004    0.000 pystaParser.py:137(_setup_objkey)
-        1    0.007    0.007    0.023    0.023 pystaParser.py:142(_set_attributes)
-        1    0.002    0.002    0.002    0.002 pystaParser.py:156(_get_index2indent_dict)
+        1    0.942    0.942    1.004    1.004 pystaParser.py:88(get_tokens)
         1    0.065    0.065    0.067    0.067 pystaParser.py:164(_get_nest2indent_list)
-        1    0.000    0.000    0.000    0.000 pystaParser.py:167(<listcomp>)
-        1    0.002    0.002    0.002    0.002 pystaParser.py:193(_set_indent)
-     9729    0.006    0.000    0.009    0.000 pystaParser.py:200(_convert_value)
+    11778    0.024    0.000    0.041    0.000 pystaParser.py:35(_get_symbol_dict)
+    79884    0.020    0.000    0.020    0.000 pystaParser.py:23(__init__)
   768/256    0.012    0.000    0.029    0.000 pystaParser.py:213(_get_dicts)
-    79884    0.019    0.000    0.019    0.000 pystaParser.py:23(__init__)
+    20993    0.011    0.000    0.011    0.000 pystaParser.py:127(_setup_nest)
     513/1    0.009    0.000    0.033    0.033 pystaParser.py:245(_get_arrays)
-   1281/1    0.001    0.000    0.033    0.033 pystaParser.py:267(_get_json_obj)
-        1    0.000    0.000    1.128    1.128 pystaParser.py:277(parse)
-    11778    0.025    0.000    0.041    0.000 pystaParser.py:35(_get_symbol_dict)
-     4352    0.007    0.000    0.009    0.000 pystaParser.py:53(_get_strings_step)
-     3328    0.004    0.000    0.006    0.000 pystaParser.py:67(_get_numbers_step)
+     4352    0.007    0.000    0.010    0.000 pystaParser.py:53(_get_strings_step)
+        1    0.007    0.007    0.022    0.022 pystaParser.py:142(_set_attributes)
+     9729    0.006    0.000    0.009    0.000 pystaParser.py:200(_convert_value)
+     3328    0.005    0.000    0.006    0.000 pystaParser.py:67(_get_numbers_step)
+    20993    0.004    0.000    0.004    0.000 pystaParser.py:137(_setup_objkey)
+    65322    0.004    0.000    0.004    0.000 {method 'append' of 'list' objects}
+        1    0.003    0.003    0.003    0.003 pystaParser.py:193(_set_indent)
+    40708    0.002    0.000    0.002    0.000 {method 'isspace' of 'str' objects}
+        1    0.002    0.002    0.002    0.002 pystaParser.py:156(_get_index2indent_dict)
      1536    0.001    0.000    0.002    0.000 pystaParser.py:76(_get_bools2null_step)
-        1    0.942    0.942    1.003    1.003 pystaParser.py:88(get_tokens)
-        1    0.000    0.000    0.000    0.000 pystaParser.py:96(<lambda>)
-        1    0.000    0.000    0.000    0.000 pystaParser.py:96(<listcomp>)
+     9216    0.001    0.000    0.001    0.000 {method 'join' of 'str' objects}
      4096    0.001    0.000    0.003    0.000 re.py:180(search)
      4096    0.001    0.000    0.001    0.000 re.py:287(_compile)
-        2    0.000    0.000    0.000    0.000 sre_compile.py:224(_compile_charset)
+        1    0.001    0.001    1.130    1.130 <string>:1(<module>)
+     4096    0.001    0.000    0.001    0.000 {method 'search' of '_sre.SRE_Pattern' objects}
+     9251    0.001    0.000    0.001    0.000 {built-in method builtins.len}
+   1281/1    0.001    0.000    0.033    0.033 pystaParser.py:267(_get_json_obj)
+     3072    0.000    0.000    0.000    0.000 {method 'update' of 'dict' objects}
+        1    0.000    0.000    1.129    1.129 pystaParser.py:277(parse)
+        1    0.000    0.000    0.000    0.000 pystaParser.py:167(<listcomp>)
+        1    0.000    0.000    1.130    1.130 {built-in method builtins.exec}
+        2    0.000    0.000    0.000    0.000 sre_parse.py:470(_parse)
         2    0.000    0.000    0.000    0.000 sre_compile.py:251(_optimize_charset)
-        2    0.000    0.000    0.000    0.000 sre_compile.py:377(_mk_bitmap)
+        2    0.000    0.000    0.000    0.000 sre_compile.py:558(compile)
+        2    0.000    0.000    0.000    0.000 sre_parse.py:846(parse)
+        8    0.000    0.000    0.000    0.000 enum.py:516(__new__)
+        4    0.000    0.000    0.000    0.000 enum.py:802(__and__)
         2    0.000    0.000    0.000    0.000 sre_compile.py:379(<listcomp>)
+        2    0.000    0.000    0.000    0.000 sre_compile.py:483(_compile_info)
+        1    0.000    0.000    0.000    0.000 sre_parse.py:295(_class_escape)
+        2    0.000    0.000    0.000    0.000 sre_compile.py:377(_mk_bitmap)
+        2    0.000    0.000    0.000    0.000 sre_parse.py:174(getwidth)
+       10    0.000    0.000    0.000    0.000 sre_parse.py:233(__next)
+       10    0.000    0.000    0.000    0.000 {method 'find' of 'bytearray' objects}
+        2    0.000    0.000    0.000    0.000 {method 'translate' of 'bytearray' objects}
+       14    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
+        2    0.000    0.000    0.000    0.000 sre_compile.py:543(_code)
+        2    0.000    0.000    0.000    0.000 sre_parse.py:224(__init__)
+        8    0.000    0.000    0.000    0.000 sre_parse.py:254(get)
+        1    0.000    0.000    0.000    0.000 pystaParser.py:96(<listcomp>)
+        4    0.000    0.000    0.000    0.000 {method 'extend' of 'list' objects}
+        6    0.000    0.000    0.000    0.000 {built-in method builtins.min}
+        2    0.000    0.000    0.000    0.000 {built-in method _sre.compile}
+        8    0.000    0.000    0.000    0.000 enum.py:266(__call__)
+        2    0.000    0.000    0.000    0.000 sre_compile.py:65(_compile)
+        2    0.000    0.000    0.000    0.000 sre_compile.py:224(_compile_charset)
+        4    0.000    0.000    0.000    0.000 sre_compile.py:540(isstring)
+        2    0.000    0.000    0.000    0.000 sre_parse.py:77(__init__)
+        2    0.000    0.000    0.000    0.000 sre_parse.py:112(__init__)
+        2    0.000    0.000    0.000    0.000 sre_parse.py:172(append)
+        3    0.000    0.000    0.000    0.000 sre_parse.py:286(tell)
+        2    0.000    0.000    0.000    0.000 sre_parse.py:408(_parse_sub)
+        2    0.000    0.000    0.000    0.000 sre_parse.py:830(fix_flags)
+        6    0.000    0.000    0.000    0.000 {built-in method builtins.ord}
         1    0.000    0.000    0.000    0.000 sre_compile.py:394(_generate_overlap_table)
         2    0.000    0.000    0.000    0.000 sre_compile.py:415(_get_literal_prefix)
         1    0.000    0.000    0.000    0.000 sre_compile.py:442(_get_charset_prefix)
-        2    0.000    0.000    0.000    0.000 sre_compile.py:483(_compile_info)
-        4    0.000    0.000    0.000    0.000 sre_compile.py:540(isstring)
-        2    0.000    0.000    0.000    0.000 sre_compile.py:543(_code)
-        2    0.000    0.000    0.000    0.000 sre_compile.py:558(compile)
-        2    0.000    0.000    0.000    0.000 sre_compile.py:65(_compile)
-        2    0.000    0.000    0.000    0.000 sre_parse.py:112(__init__)
-        2    0.000    0.000    0.000    0.000 sre_parse.py:172(append)
-        2    0.000    0.000    0.000    0.000 sre_parse.py:174(getwidth)
-        2    0.000    0.000    0.000    0.000 sre_parse.py:224(__init__)
-       10    0.000    0.000    0.000    0.000 sre_parse.py:233(__next)
         8    0.000    0.000    0.000    0.000 sre_parse.py:249(match)
-        8    0.000    0.000    0.000    0.000 sre_parse.py:254(get)
-        3    0.000    0.000    0.000    0.000 sre_parse.py:286(tell)
-        1    0.000    0.000    0.000    0.000 sre_parse.py:295(_class_escape)
-        2    0.000    0.000    0.000    0.000 sre_parse.py:408(_parse_sub)
-        2    0.000    0.000    0.000    0.000 sre_parse.py:470(_parse)
-        2    0.000    0.000    0.000    0.000 sre_parse.py:77(__init__)
-        4    0.000    0.000    0.000    0.000 sre_parse.py:82(groups)
-        2    0.000    0.000    0.000    0.000 sre_parse.py:830(fix_flags)
-        2    0.000    0.000    0.000    0.000 sre_parse.py:846(parse)
-        2    0.000    0.000    0.000    0.000 {built-in method _sre.compile}
-        1    0.000    0.000    1.129    1.129 {built-in method builtins.exec}
-       14    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
-     9251    0.001    0.000    0.001    0.000 {built-in method builtins.len}
-        6    0.000    0.000    0.000    0.000 {built-in method builtins.min}
-        6    0.000    0.000    0.000    0.000 {built-in method builtins.ord}
-    65322    0.003    0.000    0.003    0.000 {method 'append' of 'list' objects}
-        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
-        4    0.000    0.000    0.000    0.000 {method 'extend' of 'list' objects}
-       10    0.000    0.000    0.000    0.000 {method 'find' of 'bytearray' objects}
+        1    0.000    0.000    0.000    0.000 pystaParser.py:96(<lambda>)
         2    0.000    0.000    0.000    0.000 {method 'get' of 'dict' objects}
-    40708    0.002    0.000    0.002    0.000 {method 'isspace' of 'str' objects}
-        2    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
-     9216    0.001    0.000    0.001    0.000 {method 'join' of 'str' objects}
         2    0.000    0.000    0.000    0.000 {method 'keys' of 'dict' objects}
-     4096    0.001    0.000    0.001    0.000 {method 'search' of '_sre.SRE_Pattern' objects}
-        2    0.000    0.000    0.000    0.000 {method 'translate' of 'bytearray' objects}
-     3072    0.000    0.000    0.000    0.000 {method 'update' of 'dict' objects}
-
+        2    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        4    0.000    0.000    0.000    0.000 sre_parse.py:82(groups)
 ```
 
 
