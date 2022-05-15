@@ -184,18 +184,18 @@ file name: sample04.json
 ## 私のアホアホ設計
 
 1. `pathlib` で、`.json` 取得
-  1. `read_text(encoding='utf-8')` でテキスト取得
+    1. `read_text(encoding='utf-8')` でテキスト取得
 2. `get_token`
-  1. 文字列を`list` に
-  2. 一つづつ`for` で回す。token化し、文字列分index を進める
-    1. 各型に振り分け
-      - `symbols`
-        - `[` `{` `:` `,` とか
-      - `bool` `null`
-      - `str`
-        - 最初の`"` を検知して、エスケープを除いた`"` までを取得
-      - `number`
-      - 空白
+    1. 文字列を`list` に
+    2. 一つづつ`for` で回す。token化し、文字列分index を進める
+        1. 各型に振り分け
+            - `symbols`
+                - `[` `{` `:` `,` とか
+            - `bool` `null`
+            - `str`
+                - 最初の`"` を検知して、エスケープを除いた`"` までを取得
+            - `number`
+            - 空白
 
 
 
