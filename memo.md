@@ -139,6 +139,45 @@ file name: sample04.json
         2    0.000    0.000    0.000    0.000 {method 'end' of '_sre.SRE_Match' objects}
         2    0.000    0.000    0.000    0.000 {method 'match' of '_sre.SRE_Pattern' objects}
         1    0.000    0.000    0.000    0.000 {method 'startswith' of 'str' objects}
+```
+
+[youkidearitai/my-json-parser](https://github.com/youkidearitai/my-json-parser/)
+
+```
+         336219 function calls (327771 primitive calls) in 0.088 seconds
+
+   Ordered by: internal time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    35842    0.011    0.000    0.012    0.000 speedMeasurement.py:59(whitespace)
+     9728    0.011    0.000    0.016    0.000 speedMeasurement.py:216(<listcomp>)
+     4352    0.009    0.000    0.011    0.000 speedMeasurement.py:70(value_string)
+   158730    0.009    0.000    0.009    0.000 {built-in method builtins.chr}
+   7425/1    0.009    0.000    0.088    0.088 speedMeasurement.py:263(value)
+     6145    0.007    0.000    0.011    0.000 speedMeasurement.py:271(<listcomp>)
+     4608    0.007    0.000    0.023    0.000 speedMeasurement.py:207(digit)
+    74309    0.005    0.000    0.005    0.000 {built-in method builtins.next}
+  768/256    0.005    0.000    0.086    0.000 speedMeasurement.py:23(value_object)
+    513/1    0.004    0.000    0.088    0.088 speedMeasurement.py:43(value_array)
+     3328    0.002    0.000    0.028    0.000 speedMeasurement.py:206(value_number)
+     3328    0.001    0.000    0.023    0.000 speedMeasurement.py:228(fraction)
+     4352    0.001    0.000    0.002    0.000 speedMeasurement.py:312(is_nextarray)
+     3328    0.001    0.000    0.026    0.000 speedMeasurement.py:240(exponent)
+      768    0.001    0.000    0.001    0.000 speedMeasurement.py:190(value_null)
+     3072    0.001    0.000    0.001    0.000 speedMeasurement.py:149(colon)
+     3072    0.001    0.000    0.001    0.000 speedMeasurement.py:333(is_nextobject)
+      352    0.001    0.000    0.001    0.000 speedMeasurement.py:158(value_false)
+      416    0.001    0.000    0.001    0.000 speedMeasurement.py:174(value_true)
+     4352    0.001    0.000    0.001    0.000 speedMeasurement.py:303(is_emptyarray)
+     3072    0.000    0.000    0.000    0.000 speedMeasurement.py:324(is_emptyobject)
+     4352    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+        1    0.000    0.000    0.088    0.088 <string>:1(<module>)
+        1    0.000    0.000    0.088    0.088 {built-in method builtins.exec}
+        1    0.000    0.000    0.088    0.088 speedMeasurement.py:9(parse)
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.iter}
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        1    0.000    0.000    0.000    0.000 speedMeasurement.py:16(<listcomp>)
 
 
 

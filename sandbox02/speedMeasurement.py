@@ -3,14 +3,14 @@ from pystaParser import parse
 if __name__ == '__main__':
   from pathlib import Path
   import json
-  
+
   import cProfile
   #import profile
   import time
 
   json_path = Path('./sample04.json')
   json_str = json_path.read_text(encoding='utf-8')
-  
+
   cProfile.run("parse(json_str)", sort=1)
   #cProfile.run("json.loads(json_str)")
   #main = profile.run(json_path.read_text(encoding='utf-8'))
@@ -30,6 +30,4 @@ if __name__ == '__main__':
   #print(main_json == main_sample)
   print('平均:', ave_num / float(all_num))
   '''
-  
-
 
