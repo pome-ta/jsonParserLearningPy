@@ -20,7 +20,7 @@ class TokenType(Enum):
 
 
 class Token:
-  def __init__(self, token_type: TokenType, value: str = None):
+  def __init__(self, token_type: TokenType, value: str=None):
     self.token_type: TokenType = token_type
     self.value: str = value
     self.obj_key: bool = False
@@ -119,7 +119,16 @@ def get_tokens(strs: str) -> list:  # xxx: 長いな
 
     if char in match_symbols:
       tkn = _switch_symbol_token(char)
-      nest = _setup_nest(tkn, nest)
+      if tkn.token_type in [
+          TokenType.L_BRACE, TokenType.L_BRACKET, TokenType.R_BRACE,
+          TokenType.R_BRACKET
+      ]:
+        nest = _setup_nest(tkn, nest)
+      if tkn.token_type in [TokenType.COLON]:
+        try:
+          tokens[-1].obj_key = True
+        except Exception(e):
+          print(f'error: {e}')
       add_index = 1
     elif char in match_bool2null:
       tkn, add_index = _get_bools2null_step(
@@ -133,10 +142,10 @@ def get_tokens(strs: str) -> list:  # xxx: 長いな
       raise Exception(f'Token error: {char}')
     index += add_index
     tokens.append(tkn)
-  
+
   if nest != 1:  # xxx: エラー処理
     raise Exception('nest error: nest panic')
-  
+
   return tokens
 
 
@@ -163,8 +172,6 @@ def _set_attributes(tokens) -> None:
     #nest_num = _setup_nest(now_tkn, nest_num)
     next_tkn = tokens[index + 1] if index + 1 < length else None
     _setup_objkey(now_tkn, next_tkn)
-
-  
 
 
 def _get_index2indent_dict(tokens: list) -> list:
@@ -217,7 +224,8 @@ def _convert_value(tkn: Token) -> Optional:  # xxx: type
   elif tkn.token_type == TokenType.NULL:
     value = None
   elif tkn.token_type == TokenType.NUMBER:
-    value = float(tkn.value) if re.search(r'[.|eE]', tkn.value) else int(tkn.value)
+    value = float(tkn.value) if re.search(r'[.|eE]',
+                                          tkn.value) else int(tkn.value)
   else:
     value = str(tkn.value)
   return value
@@ -245,7 +253,8 @@ def _get_dicts(tokens: list, indent: int) -> dict:
         dic_key = None
         dic_value = None
         values = []
-      if colon_flag and not (tkn.token_type in [TokenType.COMMA, TokenType.COLON]):
+      if colon_flag and not (
+          tkn.token_type in [TokenType.COMMA, TokenType.COLON]):
         dic_value = _convert_value(tkn)
 
     else:
@@ -276,7 +285,7 @@ def _get_arrays(tokens: list, indent: int) -> list:
   return arrays
 
 
-def _get_json_obj(tokens: list, indent: int = 1) -> dict:
+def _get_json_obj(tokens: list, indent: int=1) -> dict:
   objs = None  # memo: 再帰呼び出し開始
   if tokens[0].token_type == TokenType.L_BRACKET:
     objs = _get_arrays(tokens, indent)
@@ -287,7 +296,7 @@ def _get_json_obj(tokens: list, indent: int = 1) -> dict:
 
 def parse(strs: str):
   token_list = get_tokens(strs)
-  _set_attributes(token_list)
+  #_set_attributes(token_list)
   nest_indent_list = _get_nest2indent_list(token_list)
   _set_indent(token_list, nest_indent_list)
   json_objs = _get_json_obj(token_list)
@@ -303,3 +312,4 @@ if __name__ == '__main__':
   main_json = parse(json_str)
   main_sample = json.loads(json_str)
   print(main_json == main_sample)
+
