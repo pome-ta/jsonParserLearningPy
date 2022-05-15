@@ -95,17 +95,18 @@ def _get_bools2null_step(value_list: list) -> tuple:
   return tkn, len(bool_null)
 
 
-def get_tokens(strs: str) -> list:
+def get_tokens(strs: str) -> list:  # xxx: 長いな
   char_list = list(strs)
   length = char_list.__len__()
   tokens = []
 
-  flag_symbols = ['[', ']', '{', '}', ':', ',']
-  flag_bool2null = bools2null_dict.keys()
-  flag_numbers = [
+  match_symbols = ['[', ']', '{', '}', ':', ',']
+  match_bool2null = bools2null_dict.keys()
+  match_numbers = [
     *(lambda: [str(n) for n in range(10)])(), '.', '-', 'e', 'E'
   ]  # xxx: `e`, `E` は不要？
   pre_tkn = None
+  nest = 1  # xxx `if` 処理の`Falsy(0)` 回避のため
   index = 0
   for _ in range(length):
     if index >= length:
@@ -116,21 +117,26 @@ def get_tokens(strs: str) -> list:
       index += 1
       continue  # 空白は早々に棄却
 
-    if char in flag_symbols:
+    if char in match_symbols:
       tkn = _switch_symbol_token(char)
+      nest = _setup_nest(tkn, nest)
       add_index = 1
-    elif char in flag_bool2null:
+    elif char in match_bool2null:
       tkn, add_index = _get_bools2null_step(
         char_list[index:index + 5 if char == 'f' else index + 4])
     elif char == '"':
       tkn, add_index = _get_strings_step(char_list[index:])
-    elif char in flag_numbers:
+    elif char in match_numbers:
       tkn, add_index = _get_numbers_step(char_list[index:])
 
     else:  # xxx: エラー処理
       raise Exception(f'Token error: {char}')
     index += add_index
     tokens.append(tkn)
+  
+  if nest != 1:  # xxx: エラー処理
+    raise Exception('nest error: nest panic')
+  
   return tokens
 
 
@@ -151,16 +157,14 @@ def _setup_objkey(f_tkn: Token, s_tkn: Token) -> None:
 
 def _set_attributes(tokens) -> None:
   length = tokens.__len__()
-
-  nest_num = 1  # xxx `if` 処理の`Falsy(0)` 回避のため
+  #nest_num = 1  # xxx `if` 処理の`Falsy(0)` 回避のため
   for index in range(length):
     now_tkn = tokens[index]
-    nest_num = _setup_nest(now_tkn, nest_num)
+    #nest_num = _setup_nest(now_tkn, nest_num)
     next_tkn = tokens[index + 1] if index + 1 < length else None
     _setup_objkey(now_tkn, next_tkn)
 
-  if nest_num != 1:  # xxx: エラー処理
-    raise Exception('nest error: nest panic')
+  
 
 
 def _get_index2indent_dict(tokens: list) -> list:
