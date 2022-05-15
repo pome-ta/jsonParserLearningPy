@@ -3,10 +3,12 @@ from pystaParser import parse
 if __name__ == '__main__':
   from pathlib import Path
   import json
+  
   import time
 
   json_path = Path('./sample04.json')
   json_str = json_path.read_text(encoding='utf-8')
+  '''
   print('file name: sample04.json')
   ave_num = 0.0
   all_num = 10
@@ -20,5 +22,6 @@ if __name__ == '__main__':
   #main_sample = json.loads(json_str)
   #print(main_json == main_sample)
   print('平均:', ave_num / float(all_num))
+  '''
   
 
