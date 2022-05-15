@@ -141,7 +141,7 @@ file name: sample04.json
         1    0.000    0.000    0.000    0.000 {method 'startswith' of 'str' objects}
 ```
 
-[youkidearitai/my-json-parser](https://github.com/youkidearitai/my-json-parser/)
+[youkidearitai / my-json-parser](https://github.com/youkidearitai/my-json-parser/)
 
 ```
          336219 function calls (327771 primitive calls) in 0.088 seconds
@@ -205,6 +205,8 @@ file name: sample04.json
     - 深さが上がる場合に次の要素でしか判断できない
         - ex: 深さが5 ある場合には、5 の深さの`Token` は、5回書き換えがある
 1. 深さに合わせて、各々のオブジェクトをつくる
+    - `_get_arrays` か、`_get_dicts` を起点として再帰的に処理をしてく
+
 
 # 📝 2022/05/14
 
