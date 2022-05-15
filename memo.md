@@ -118,6 +118,31 @@ file name: sample04.json
 
 ```
 
+
+
+```
+         13 function calls in 0.001 seconds
+
+   Ordered by: standard name
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.001    0.001 <string>:1(<module>)
+        1    0.000    0.000    0.001    0.001 __init__.py:303(loads)
+        1    0.000    0.000    0.001    0.001 decoder.py:335(decode)
+        1    0.001    0.001    0.001    0.001 decoder.py:346(raw_decode)
+        1    0.000    0.000    0.001    0.001 {built-in method builtins.exec}
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        2    0.000    0.000    0.000    0.000 {method 'end' of '_sre.SRE_Match' objects}
+        2    0.000    0.000    0.000    0.000 {method 'match' of '_sre.SRE_Pattern' objects}
+        1    0.000    0.000    0.000    0.000 {method 'startswith' of 'str' objects}
+
+
+
+
+```
+
 # 📝 2022/05/14
 
 Pycharm 先生に怒られてる

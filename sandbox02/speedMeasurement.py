@@ -11,7 +11,8 @@ if __name__ == '__main__':
   json_path = Path('./sample04.json')
   json_str = json_path.read_text(encoding='utf-8')
   
-  cProfile.run("parse(json_str)")
+  #cProfile.run("parse(json_str)")
+  cProfile.run("json.loads(json_str)")
   #main = profile.run(json_path.read_text(encoding='utf-8'))
   '''
   print('file name: sample04.json')
