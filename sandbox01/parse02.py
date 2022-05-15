@@ -167,13 +167,17 @@ if __name__ == '__main__':
   import json
 
   #json_path = Path('./sample01.json')
-  json_path = Path('./sample02.json')
+  #json_path = Path('./sample02.json')
+  json_path = Path('../sandbox02/sample04.json')
   #json_path = Path('./sandbox01/sample01.json')
   json_data = json_path.read_text(encoding='utf-8')
-  dsample = json.loads(json_data)
-  dump = parse(json_data)
+  #dsample = json.loads(json_data)
+  import cProfile
+  
+  #dump = parse(json_data)
+  cProfile.run("parse(json_data)", sort=1)
 
-  print(dsample == dump)
+  #print(dsample == dump)
 
-  a = 1
+  #a = 1
 
