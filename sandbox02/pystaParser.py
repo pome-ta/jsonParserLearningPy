@@ -106,6 +106,7 @@ def get_tokens(strs: str) -> list:  # xxx: 長いな
     *(lambda: [str(n) for n in range(10)])(), '.', '-', 'e', 'E'
   ]  # xxx: `e`, `E` は不要？
   pre_tkn = None
+  end_flag = False
   nest = 1  # xxx `if` 処理の`Falsy(0)` 回避のため
   index = 0
   for _ in range(length):
@@ -127,7 +128,7 @@ def get_tokens(strs: str) -> list:  # xxx: 長いな
       if tkn.token_type in [TokenType.COLON]:
         try:
           tokens[-1].obj_key = True
-        except Exception(e):
+        except Exception as e:
           print(f'error: {e}')
       add_index = 1
     elif char in match_bool2null:
@@ -141,6 +142,10 @@ def get_tokens(strs: str) -> list:  # xxx: 長いな
     else:  # xxx: エラー処理
       raise Exception(f'Token error: {char}')
     index += add_index
+    end_flag = False if tkn.token_type in [
+      TokenType.R_BRACE, TokenType.R_BRACKET
+    ] else True
+    tkn.indent = nest - end_flag
     tokens.append(tkn)
 
   if nest != 1:  # xxx: エラー処理
@@ -297,10 +302,10 @@ def _get_json_obj(tokens: list, indent: int=1) -> dict:
 def parse(strs: str):
   token_list = get_tokens(strs)
   #_set_attributes(token_list)
-  nest_indent_list = _get_nest2indent_list(token_list)
-  _set_indent(token_list, nest_indent_list)
+  #nest_indent_list = _get_nest2indent_list(token_list)
+  #_set_indent(token_list, nest_indent_list)
   json_objs = _get_json_obj(token_list)
-  return json_objs
+  return json_objs, token_list
 
 
 if __name__ == '__main__':
@@ -309,7 +314,7 @@ if __name__ == '__main__':
 
   json_path = Path('./sample04.json')
   json_str = json_path.read_text(encoding='utf-8')
-  main_json = parse(json_str)
+  main_json, main_token = parse(json_str)
   main_sample = json.loads(json_str)
   print(main_json == main_sample)
 
