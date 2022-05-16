@@ -105,8 +105,6 @@ def get_tokens(strs: str) -> list:  # xxx: 長いな
   match_numbers = [
     *(lambda: [str(n) for n in range(10)])(), '.', '-', 'e', 'E'
   ]  # xxx: `e`, `E` は不要？
-  pre_tkn = None
-  end_flag = False
   nest = 1  # xxx `if` 処理の`Falsy(0)` 回避のため
   index = 0
   for _ in range(length):
@@ -312,9 +310,11 @@ if __name__ == '__main__':
   from pathlib import Path
   import json
 
-  json_path = Path('./sample04.json')
+  json_path = Path('./sample01.json')
   json_str = json_path.read_text(encoding='utf-8')
+  
   main_json, main_token = parse(json_str)
+  main_char = list(json_str)
   main_sample = json.loads(json_str)
   print(main_json == main_sample)
 
