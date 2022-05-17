@@ -61,7 +61,7 @@ def switch_flag(flag):
 
 def division_strings(strings: str):
   obj_list = []
-  str_obj = ''
+  token_obj = ''
   is_str = False
   in_escape = False
   is_number = False
@@ -75,32 +75,109 @@ def division_strings(strings: str):
       continue
 
     if is_str and in_escape:
-      str_obj += char
+      token_obj += char
       is_str = True
       in_escape = False
       continue
 
     if char == '"':
       if is_str:
-        obj_list.append(str_obj)
-        str_obj = ''
+        obj_list.append(token_obj)
+        token_obj = ''
         is_str = False
+        in_escape = False
+        is_number = False
+        is_true = False
+        is_false = False
+        is_null = False
       else:
         is_str = True
-        continue
+      continue
 
     if is_str:
-      str_obj += char
+      token_obj += char
       if char == '\\':
         in_escape = True
       continue
 
     if char in ['[', '{', ':', ',', '}', ']']:
       obj_list.append(char)
+      #token_obj = ''
+      is_str = False
+      in_escape = False
+      is_number = False
+      is_true = False
+      is_false = False
+      is_null = False
       continue
 
-    if char == 't':
+    if not(is_str) and char == 't':
       is_true = True
+      token_obj += char
+      continue
+      
+    if not(is_str) and char == 'f':
+      is_false = True
+      token_obj += char
+      continue
+      
+    if not(is_str) and char == 'n':
+      is_null = True
+      token_obj += char
+      continue
+      
+    if is_true:
+      token_obj += char
+      if len(token_obj) >= 4:
+        if token_obj == 'true':
+          obj_list.append(token_obj)
+          token_obj = ''
+          is_str = False
+          in_escape = False
+          is_number = False
+          is_true = False
+          is_false = False
+          is_null = False
+          continue
+        else:
+          raise Exception(f'bool error: {token_obj}')
+      continue
+        
+    if is_false:
+      token_obj += char
+      if len(token_obj) >= 5:
+        if token_obj == 'false':
+          obj_list.append(token_obj)
+          token_obj = ''
+          is_str = False
+          in_escape = False
+          is_number = False
+          is_true = False
+          is_false = False
+          is_null = False
+          continue
+        else:
+          raise Exception(f'bool error: {token_obj}')
+      continue
+      
+    if is_null:
+      token_obj += char
+      if len(token_obj) >= 4:
+        if token_obj == 'null':
+          obj_list.append(token_obj)
+          token_obj = ''
+          is_str = False
+          in_escape = False
+          is_number = False
+          is_true = False
+          is_false = False
+          is_null = False
+          continue
+        else:
+          raise Exception(f'null error: {token_obj}')
+      continue
+    
+      
 
   return obj_list
 
