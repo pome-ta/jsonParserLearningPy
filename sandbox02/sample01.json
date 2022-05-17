@@ -6,7 +6,7 @@
   "hoge": [1, 2, {"piyo": null},{"foo": true, "bar": false}, 4, null, "togatoga"],
   "fuga": {
     "akey5": {
-      "akey1": [1, 2, 3, 4, null, "togatoga"],
+      "akey1": [1, 2, 3, 4, null, "😊"],
       "akey2": "あいうえお",
       "akey3": "\" \\ / \b \f \n \r \t"
     },
