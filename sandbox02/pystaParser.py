@@ -123,7 +123,7 @@ def get_tokens(strs: str) -> list:  # xxx: 長いな
           TokenType.R_BRACKET
       ]:
         nest = _setup_nest(tkn, nest)
-      if tkn.token_type in [TokenType.COLON]:
+      if tkn.token_type == TokenType.COLON:
         try:
           tokens[-1].obj_key = True
         except Exception as e:
@@ -310,9 +310,9 @@ if __name__ == '__main__':
   from pathlib import Path
   import json
 
-  json_path = Path('./sample01.json')
+  json_path = Path('./sample04.json')
   json_str = json_path.read_text(encoding='utf-8')
-  
+
   main_json, main_token = parse(json_str)
   main_char = list(json_str)
   main_sample = json.loads(json_str)
