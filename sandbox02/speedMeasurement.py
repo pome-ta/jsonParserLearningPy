@@ -1,4 +1,4 @@
-from pystaParser import parse
+from pystaParser02 import parse
 
 if __name__ == '__main__':
   from pathlib import Path
@@ -6,7 +6,7 @@ if __name__ == '__main__':
 
   import cProfile
   #import profile
-  import time
+  #import time
 
   json_path = Path('./sample04.json')
   json_str = json_path.read_text(encoding='utf-8')
