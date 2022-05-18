@@ -145,6 +145,7 @@ def get_tokens(strs: str) -> list:  # xxx: 長いな
     ] else True
     tkn.indent = nest - end_flag
     tokens.append(tkn)
+    print(tkn.indent)
 
   if nest != 1:  # xxx: エラー処理
     raise Exception('nest error: nest panic')
@@ -310,7 +311,7 @@ if __name__ == '__main__':
   from pathlib import Path
   import json
 
-  json_path = Path('./sample04.json')
+  json_path = Path('./sample02.json')
   json_str = json_path.read_text(encoding='utf-8')
 
   main_json, main_token = parse(json_str)
