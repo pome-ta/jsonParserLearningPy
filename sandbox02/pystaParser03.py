@@ -49,7 +49,6 @@ def _switch_symbol_token(value: str) -> Token:
   return tkn
 
 
-
 def division_strings(strings: str):
   match_numbers = [
     *(lambda: [str(n) for n in range(10)])(), '.', '-', 'e', 'E'
@@ -67,10 +66,10 @@ def division_strings(strings: str):
 
   for char in strings:
     # 属性が何かを確認する
-    
+
     if not (is_str) and char.isspace():
       continue
-    
+
     if is_str and in_escape:
       token_obj += char
       is_str = True
@@ -82,7 +81,7 @@ def division_strings(strings: str):
         tkn = Token(TokenType.STRING, token_obj)
         tkn.indent = nest - end_flag
         obj_list.append(tkn)
-        
+
         token_obj = ''
         is_str = False
         in_escape = False
@@ -105,7 +104,7 @@ def division_strings(strings: str):
         tkn = Token(TokenType.NUMBER, token_obj)
         tkn.indent = nest - end_flag
         obj_list.append(tkn)
-        
+
       tkn = _switch_symbol_token(char)
       if tkn.token_type in [
           TokenType.L_BRACE, TokenType.L_BRACKET, TokenType.R_BRACE,
@@ -117,12 +116,13 @@ def division_strings(strings: str):
           obj_list[-1].obj_key = True
         except Exception as e:
           print(f'error: {e}')
-      end_flag = False if tkn.token_type in [TokenType.R_BRACE, TokenType.R_BRACKET] else True
-      
-      
+      end_flag = False if tkn.token_type in [
+        TokenType.R_BRACE, TokenType.R_BRACKET
+      ] else True
+
       tkn.indent = nest - end_flag
       obj_list.append(tkn)
-      
+
       token_obj = ''
       is_str = False
       in_escape = False
@@ -193,7 +193,7 @@ def division_strings(strings: str):
           tkn = Token(TokenType.NULL, token_obj)
           tkn.indent = nest - end_flag
           obj_list.append(tkn)
-          
+
           token_obj = ''
           is_str = False
           in_escape = False
@@ -286,8 +286,10 @@ def _set_indent(tokens: list, nests: list) -> None:
     for tkn in ext_tokens:
       tkn.indent = i
 
+
 re_true = re.compile(r't')
 re_number = re.compile(r'[.|eE]')
+
 
 def _convert_value(tkn: Token) -> Optional:  # xxx: type
   if tkn.token_type == TokenType.BOOLEAN:
@@ -295,8 +297,7 @@ def _convert_value(tkn: Token) -> Optional:  # xxx: type
   elif tkn.token_type == TokenType.NULL:
     value = None
   elif tkn.token_type == TokenType.NUMBER:
-    value = float(tkn.value) if re_number.search(
-                                          tkn.value) else int(tkn.value)
+    value = float(tkn.value) if re_number.search(tkn.value) else int(tkn.value)
   else:
     value = str(tkn.value)
   return value
