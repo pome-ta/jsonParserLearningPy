@@ -309,10 +309,6 @@ def _get_json_obj(tokens: list, indent: int=1) -> dict:
 
 def parse(strs: str):
   token_list = division_strings(strs)
-
-  #_set_attributes(token_list)
-  #nest_indent_list = _get_nest2indent_list(token_list)
-  #_set_indent(token_list, nest_indent_list)
   json_objs = _get_json_obj(token_list)
   return json_objs, token_list
 

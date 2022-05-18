@@ -300,8 +300,9 @@ if __name__ == '__main__':
   json_str = json_path.read_text(encoding='utf-8')
   
   json_list = division_strings(json_str)
-  '''
+  
   join_gen = gen_strings(json_str)
+  '''
   join_gen_list = list(join_gen)
   print(join_gen_list == json_list)
   '''
