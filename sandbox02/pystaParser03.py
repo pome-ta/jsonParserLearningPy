@@ -49,51 +49,6 @@ def _switch_symbol_token(value: str) -> Token:
   return tkn
 
 
-bools2null_dict = {
-  't': 'true',
-  'f': 'false',
-  'n': 'null',
-}
-
-
-def _get_strings_step(tail_list: list) -> tuple:
-  index = 0
-  quotation_flag = False
-  for n, string in enumerate(tail_list):
-    index = n
-    if string == '"':
-      if n and tail_list[n - 1] == '\\':
-        continue
-      if quotation_flag:
-        break
-      quotation_flag = True
-  str_list = tail_list[:index + 1]
-  str_value = ''.join(str_list[1:index])  # xxx: エスケープやら文字エンコードなど
-  return Token(TokenType.STRING, str_value), len(str_list)
-
-
-def _get_numbers_step(tail_list: list) -> tuple:
-  end = [',', '}', ']', '\n']  # xxx: `10,000` みたいな表現できない
-  index = 0
-  for n, number in enumerate(tail_list):
-    index = n
-    if number in end:
-      break
-  num_value = ''.join(tail_list[:index])
-  return Token(TokenType.NUMBER, num_value), len(num_value)
-
-
-def _get_bools2null_step(value_list: list) -> tuple:
-  bool_null = ''.join(value_list)
-  if bool_null == bools2null_dict[value_list[0]]:
-    # xxx 長すぎー？
-    tkn = Token(TokenType.NULL, bool_null) if bool_null == 'null' else Token(
-      TokenType.BOOLEAN, bool_null)
-
-  else:  # xxx: エラー処理
-    raise Exception(f'bool or null typeError: {bool_null}')
-  return tkn, len(bool_null)
-
 
 def division_strings(strings: str):
   match_numbers = [
@@ -331,14 +286,16 @@ def _set_indent(tokens: list, nests: list) -> None:
     for tkn in ext_tokens:
       tkn.indent = i
 
+re_true = re.compile(r't')
+re_number = re.compile(r'[.|eE]')
 
 def _convert_value(tkn: Token) -> Optional:  # xxx: type
   if tkn.token_type == TokenType.BOOLEAN:
-    value = True if re.search(r't', tkn.value) else False
+    value = True if re_true.search(tkn.value) else False
   elif tkn.token_type == TokenType.NULL:
     value = None
   elif tkn.token_type == TokenType.NUMBER:
-    value = float(tkn.value) if re.search(r'[.|eE]',
+    value = float(tkn.value) if re_number.search(
                                           tkn.value) else int(tkn.value)
   else:
     value = str(tkn.value)
