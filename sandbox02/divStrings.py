@@ -296,15 +296,16 @@ if __name__ == '__main__':
   from pathlib import Path
   import cProfile
 
-  json_path = Path('./sample04.json')
+  json_path = Path('./sample01.json')
   json_str = json_path.read_text(encoding='utf-8')
-  '''
+  
   json_list = division_strings(json_str)
+  '''
   join_gen = gen_strings(json_str)
   join_gen_list = list(join_gen)
   print(join_gen_list == json_list)
   '''
 
   #cProfile.run('division_strings(json_str)', sort=1)
-  cProfile.run('gen_strings(json_str)', sort=1)
+  #cProfile.run('gen_strings(json_str)', sort=1)
 
