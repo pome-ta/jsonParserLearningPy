@@ -144,6 +144,7 @@ def gen_strings(strings: str):
       token_obj += char
       continue
 
+
 def set_string(char: str, str_obj: str, open_flag: bool, escape_flag: bool):
   if open_flag and escape_flag:
     str_obj += char
@@ -298,9 +299,9 @@ if __name__ == '__main__':
 
   json_path = Path('./sample01.json')
   json_str = json_path.read_text(encoding='utf-8')
-  
+
   json_list = division_strings(json_str)
-  
+
   join_gen = gen_strings(json_str)
   '''
   join_gen_list = list(join_gen)
