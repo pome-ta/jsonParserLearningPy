@@ -30,7 +30,7 @@ class Token:
   def __str__(self):
     return str(self.value)
 
-
+'''
 def _switch_symbol_token(value: str) -> Token:
   if value == '[':
     tkn = Token(TokenType.L_BRACKET, value)
@@ -47,7 +47,23 @@ def _switch_symbol_token(value: str) -> Token:
   else:
     raise Exception(f'symbol typeError: {value}')
   return tkn
+'''
 
+def _switch_symbol_token(value: str) -> Token:
+  if value == '[':
+    return Token(TokenType.L_BRACKET, value)
+  elif value == ']':
+    return Token(TokenType.R_BRACKET, value)
+  elif value == '{':
+    return Token(TokenType.L_BRACE, value)
+  elif value == '}':
+    return Token(TokenType.R_BRACE, value)
+  elif value == ':':
+    return Token(TokenType.COLON, value)
+  elif value == ',':
+    return Token(TokenType.COMMA, value)
+  else:
+    raise Exception(f'symbol typeError: {value}')
 
 def division_strings(strings: str):
   match_numbers = [
