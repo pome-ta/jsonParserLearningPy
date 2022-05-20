@@ -1,3 +1,35 @@
+# 📝 2022/05/20
+
+
+`pystaParser04`
+
+```
+         170706 function calls (168402 primitive calls) in 0.083 seconds
+
+   Ordered by: internal time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.035    0.035    0.052    0.052 pystaParser04.py:68(division_strings)
+  768/256    0.012    0.000    0.026    0.000 pystaParser04.py:263(_get_dicts)
+    513/1    0.009    0.000    0.030    0.030 pystaParser04.py:295(_get_arrays)
+    11777    0.007    0.000    0.010    0.000 pystaParser04.py:52(_switch_symbol_token)
+     9729    0.005    0.000    0.006    0.000 pystaParser04.py:251(_convert_value)
+    20993    0.005    0.000    0.005    0.000 pystaParser04.py:23(__init__)
+    61441    0.003    0.000    0.003    0.000 {method 'append' of 'list' objects}
+    49507    0.002    0.000    0.002    0.000 {method 'isspace' of 'str' objects}
+     2562    0.002    0.000    0.002    0.000 pystaParser04.py:237(_setup_nest)
+        1    0.001    0.001    0.083    0.083 <string>:1(<module>)
+     4096    0.001    0.000    0.001    0.000 {method 'search' of '_sre.SRE_Pattern' objects}
+   1281/1    0.001    0.000    0.030    0.030 pystaParser04.py:317(_get_json_obj)
+     3072    0.000    0.000    0.000    0.000 {method 'update' of 'dict' objects}
+     4960    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+        1    0.000    0.000    0.083    0.083 {built-in method builtins.exec}
+        1    0.000    0.000    0.000    0.000 pystaParser04.py:70(<listcomp>)
+        1    0.000    0.000    0.000    0.000 pystaParser04.py:70(<lambda>)
+        1    0.000    0.000    0.083    0.083 pystaParser04.py:326(parse)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+```
+
 # 📝 2022/05/18
 
 属性関係をインクルード
