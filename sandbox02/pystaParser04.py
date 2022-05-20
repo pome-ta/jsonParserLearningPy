@@ -30,24 +30,8 @@ class Token:
   def __str__(self):
     return str(self.value)
 
-'''
-def _switch_symbol_token(value: str) -> Token:
-  if value == '[':
-    tkn = Token(TokenType.L_BRACKET, value)
-  elif value == ']':
-    tkn = Token(TokenType.R_BRACKET, value)
-  elif value == '{':
-    tkn = Token(TokenType.L_BRACE, value)
-  elif value == '}':
-    tkn = Token(TokenType.R_BRACE, value)
-  elif value == ':':
-    tkn = Token(TokenType.COLON, value)
-  elif value == ',':
-    tkn = Token(TokenType.COMMA, value)
-  else:
-    raise Exception(f'symbol typeError: {value}')
-  return tkn
-'''
+
+
 
 def _switch_symbol_token(value: str) -> Token:
   if value == '[':
@@ -65,6 +49,11 @@ def _switch_symbol_token(value: str) -> Token:
   else:
     raise Exception(f'symbol typeError: {value}')
 
+
+def reset_flag():
+  return [False, False, False, False, False, False]
+
+
 def division_strings(strings: str):
   match_numbers = [
     *(lambda: [str(n) for n in range(10)])(), '.', '-', 'e', 'E'
@@ -73,12 +62,8 @@ def division_strings(strings: str):
   end_flag = False
   obj_list = []
   token_obj = ''
-  is_str = False
-  in_escape = False
-  is_number = False
-  is_true = False
-  is_false = False
-  is_null = False
+
+  is_str, in_escape, is_number, is_true, is_false, is_null = reset_flag()
 
   for char in strings:
     # 属性が何かを確認する
@@ -99,12 +84,8 @@ def division_strings(strings: str):
         obj_list.append(tkn)
 
         token_obj = ''
-        is_str = False
-        in_escape = False
-        is_number = False
-        is_true = False
-        is_false = False
-        is_null = False
+        is_str, in_escape, is_number, is_true, is_false, is_null = reset_flag()
+
       else:
         is_str = True
       continue
@@ -140,12 +121,7 @@ def division_strings(strings: str):
       obj_list.append(tkn)
 
       token_obj = ''
-      is_str = False
-      in_escape = False
-      is_number = False
-      is_true = False
-      is_false = False
-      is_null = False
+      is_str, in_escape, is_number, is_true, is_false, is_null = reset_flag()
       continue
 
     if not (is_str) and char == 't':
@@ -171,12 +147,7 @@ def division_strings(strings: str):
           tkn.indent = nest - end_flag
           obj_list.append(tkn)
           token_obj = ''
-          is_str = False
-          in_escape = False
-          is_number = False
-          is_true = False
-          is_false = False
-          is_null = False
+          is_str, in_escape, is_number, is_true, is_false, is_null = reset_flag()
           continue
         else:
           raise Exception(f'bool error: {token_obj}')
@@ -191,12 +162,7 @@ def division_strings(strings: str):
           obj_list.append(tkn)
           #print(nest - end_flag)
           token_obj = ''
-          is_str = False
-          in_escape = False
-          is_number = False
-          is_true = False
-          is_false = False
-          is_null = False
+          is_str, in_escape, is_number, is_true, is_false, is_null = reset_flag()
           continue
         else:
           raise Exception(f'bool error: {token_obj}')
@@ -211,12 +177,7 @@ def division_strings(strings: str):
           obj_list.append(tkn)
 
           token_obj = ''
-          is_str = False
-          in_escape = False
-          is_number = False
-          is_true = False
-          is_false = False
-          is_null = False
+          is_str, in_escape, is_number, is_true, is_false, is_null = reset_flag()
           continue
         else:
           raise Exception(f'null error: {token_obj}')
@@ -340,5 +301,4 @@ if __name__ == '__main__':
   main_char = list(json_str)
   main_sample = json.loads(json_str)
   print(main_json == main_sample)
-
 
