@@ -49,6 +49,16 @@ class Context:
           s += '\t'
         elif c == 'u':
           u = 0
+          while self.has_next():
+            c = self.rnext()
+            i = HEX_LETTERS.find(c.lower())
+            if c >= 0:
+              self.back()
+              break
+            u = u * 16 | i
+          if u < 0x80:
+            
+            
         
       
   
