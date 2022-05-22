@@ -56,6 +56,8 @@ class Context:
               self.back()
               break
             u = u * 16 | i
+          s += chr(u)
+          '''
           if u < 0x80:  # xxx: 🤔
             s += chr(u)
           elif u < 0x800:
@@ -83,9 +85,13 @@ class Context:
             s += chr(0x80 | ((u >> 12) & 0x3f))
             s += chr(0x80 | ((u >> 6) & 0x3f))
             s += chr(0x80 | (u & 0x3f))
-
-        
-      
+          '''
+        elif c == '"':
+          return s
+        else:
+          s += c
+      else:  # xxx: 🤔
+        raise Exception('Invalid string token')
   
   def parse_object(self):
     self.next
@@ -100,6 +106,12 @@ class Context:
         raise Exception('Expected "\"" but not found')
       self.back()
       k = self.parse_string()
+      self.skip_white()
+      c = self.rnext()
+      if c != ':':
+        raise Exception('Expected ":" but not found')
+      
+        
   
   def parse_value(self):
     self.skip_white()
