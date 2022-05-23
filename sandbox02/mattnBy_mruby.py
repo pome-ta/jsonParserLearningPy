@@ -197,7 +197,7 @@ if __name__ == '__main__':
   from pathlib import Path
   import json
 
-  json_path = Path('./sample01.json')
+  json_path = Path('./sample02.json')
   json_str = json_path.read_text(encoding='utf-8')
   sample_str = '{"foo": "bar"}'
   main_json = rb_parse(json_str)
