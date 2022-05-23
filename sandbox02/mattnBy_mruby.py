@@ -1,33 +1,61 @@
 # https://github.com/mattn/mruby-pjson/blob/master/mrblib/pjson.rb
 
+WHITE_SPACES = [' ', '\t', '\r', '\n']
+NUMBER_LETTERS = '0123456789+-.eE'
+HEX_LETTERS = '0123456789abcdef'
 class Context:
-  WHITE_SPACES = [' ', '\t', '\r', '\n']
-  NUMBER_LETTERS = '0123456789+-.eE'
-  HEX_LETTERS = '0123456789abcdef'
   
+
   def __init__(self, s):
     self.buf = s
     self.index = 0
     self.length = len(s)
-    
+
   def skip_white(self):
     while self.buf[self.index] in WHITE_SPACES:
       self.index += 1
-      
+
   def has_next(self):  # xxx: getter ?
     return bool(self.index < self.length)
-    
+
   def rnext(self):  # todo: Python `next` と衝突するので
     b = self.buf[self.index]
     self.index += 1
     return b
-    
+
   def back(self):
     self.index -= 1
-      
+
   def current(self):
     return self.buf[self.index]
-    
+
+  def parse_constant(expect, value):
+    s = ''
+    pos = self.index
+    while self.has_next():
+      c = self.rnext()
+      if not (c in expect):
+        if s == expect:
+          self.back()
+          return value
+        else:
+          self.index = pos
+          raise Exception('Unknown token')
+      s += c
+    raise Exception('Unknown token')
+
+  def parse_number(self):
+    s = self.rnext()
+    while self.has_next():
+      c = self.rnext()
+      if not (c in NUMBER_LETTERS):
+        self.back()
+        break
+      s += c
+    if '.' in s:
+      return float(s)
+    return int(s)
+
   def parse_string(self):
     self.rnext()
     s = ''
@@ -90,11 +118,10 @@ class Context:
           return s
         else:
           s += c
-      else:  # xxx: 🤔
-        raise Exception('Invalid string token')
-  
+    raise Exception('Invalid string token')
+
   def parse_object(self):
-    self.next
+    self.rnext()
     o = {}
     while self.has_next():
       self.skip_white()
@@ -110,15 +137,66 @@ class Context:
       c = self.rnext()
       if c != ':':
         raise Exception('Expected ":" but not found')
-      
-        
-  
+      self.skip_white()
+      v = self.parse_value()
+      o[k] = v
+      self.skip_white()
+      c = self.current()
+      if c == '}':
+        self.rnext()
+        break
+      if c != ',':
+        raise Exception('Expected "," or "}" but not found')
+      self.rnext()
+    return o
+
+  def parse_array(self):
+    self.rnext()
+    a = []
+    while self.has_next():
+      self.skip_white()
+      if self.current() == ']':
+        break
+      i = self.parse_value()
+      self.skip_white()
+      c = self.rnext()
+      a.append(i)
+      if c == ']':
+        break
+      if c != ',':
+        raise Exception('Expected "," or "]" but not found')
+
+    return a
+
   def parse_value(self):
     self.skip_white()
     c = self.current()
     if c == '{':
       return self.parse_object()
+    elif c == '[':
+      return self.parse_array()
+    elif c == '"':
+      return self.parse_string()
+    elif c in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-']:
+      return self.parse_number()
+    elif c == 't':
+      return self.parse_constant('true', True)
+    elif c == 'f':
+      return self.parse_constant('false', False)
+    elif c == 'n':
+      return self.parse_constant('null', None)
+    else:
+      raise Exception('Invalid sequence')
 
 
 def parse(text):
   return Context(text).parse_value()
+
+
+if __name__ == '__main__':
+  from pathlib import Path
+  import json
+
+  json_path = Path('./sample02.json')
+  json_str = json_path.read_text(encoding='utf-8')
+  main_json = parse(json_str)
