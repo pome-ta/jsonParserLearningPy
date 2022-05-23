@@ -29,7 +29,7 @@ def gen_strings(strings: str):
     if not (is_str) and char.isspace():
       continue
 
-    #print(char)
+    # print(char)
     if is_str and in_escape:
       token_obj += char
       is_str = True
@@ -175,7 +175,7 @@ def division_strings(strings: str):
     if not (is_str) and char.isspace():
       continue
 
-    #print(char)
+    # print(char)
     if is_str and in_escape:
       token_obj += char
       is_str = True
@@ -308,6 +308,5 @@ if __name__ == '__main__':
   print(join_gen_list == json_list)
   '''
 
-  #cProfile.run('division_strings(json_str)', sort=1)
-  #cProfile.run('gen_strings(json_str)', sort=1)
-
+  # cProfile.run('division_strings(json_str)', sort=1)
+  # cProfile.run('gen_strings(json_str)', sort=1)

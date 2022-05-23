@@ -2,7 +2,7 @@ import re
 from enum import Enum  # , auto
 from typing import Optional
 
-__all__ = ['parse', 'get_tokens']
+__all__ = ['parse', 'division_strings']
 
 
 class TokenType(Enum):
@@ -20,7 +20,7 @@ class TokenType(Enum):
 
 
 class Token:
-  def __init__(self, token_type: TokenType, value: str=None):
+  def __init__(self, token_type: TokenType, value: str = None):
     self.token_type: TokenType = token_type
     self.value: str = value
     self.obj_key: bool = False
@@ -29,8 +29,6 @@ class Token:
 
   def __str__(self):
     return str(self.value)
-
-
 
 
 def _switch_symbol_token(value: str) -> Token:
@@ -104,8 +102,8 @@ def division_strings(strings: str):
 
       tkn = _switch_symbol_token(char)
       if tkn.token_type in [
-          TokenType.L_BRACE, TokenType.L_BRACKET, TokenType.R_BRACE,
-          TokenType.R_BRACKET
+        TokenType.L_BRACE, TokenType.L_BRACKET, TokenType.R_BRACE,
+        TokenType.R_BRACKET
       ]:
         nest = _setup_nest(tkn, nest)
       if tkn.token_type == TokenType.COLON:
@@ -160,7 +158,7 @@ def division_strings(strings: str):
           tkn = Token(TokenType.BOOLEAN, token_obj)
           tkn.indent = nest - end_flag
           obj_list.append(tkn)
-          #print(nest - end_flag)
+          # print(nest - end_flag)
           token_obj = ''
           is_str, in_escape, is_number, is_true, is_false, is_null = reset_flag()
           continue
@@ -275,7 +273,7 @@ def _get_arrays(tokens: list, indent: int) -> list:
   return arrays
 
 
-def _get_json_obj(tokens: list, indent: int=1) -> dict:
+def _get_json_obj(tokens: list, indent: int = 1) -> dict:
   objs = None  # memo: 再帰呼び出し開始
   if tokens[0].token_type == TokenType.L_BRACKET:
     objs = _get_arrays(tokens, indent)
@@ -301,4 +299,3 @@ if __name__ == '__main__':
   main_char = list(json_str)
   main_sample = json.loads(json_str)
   print(main_json == main_sample)
-

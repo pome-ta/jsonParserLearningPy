@@ -20,7 +20,7 @@ class TokenType(Enum):
 
 
 class Token:
-  def __init__(self, token_type: TokenType, value: str=None):
+  def __init__(self, token_type: TokenType, value: str = None):
     self.token_type: TokenType = token_type
     self.value: str = value
     self.obj_key: bool = False
@@ -119,8 +119,8 @@ def get_tokens(strs: str) -> list:  # xxx: 長いな
     if char in match_symbols:
       tkn = _switch_symbol_token(char)
       if tkn.token_type in [
-          TokenType.L_BRACE, TokenType.L_BRACKET, TokenType.R_BRACE,
-          TokenType.R_BRACKET
+        TokenType.L_BRACE, TokenType.L_BRACKET, TokenType.R_BRACE,
+        TokenType.R_BRACKET
       ]:
         nest = _setup_nest(tkn, nest)
       if tkn.token_type == TokenType.COLON:
@@ -170,10 +170,10 @@ def _setup_objkey(f_tkn: Token, s_tkn: Token) -> None:
 
 def _set_attributes(tokens) -> None:
   length = tokens.__len__()
-  #nest_num = 1  # xxx `if` 処理の`Falsy(0)` 回避のため
+  # nest_num = 1  # xxx `if` 処理の`Falsy(0)` 回避のため
   for index in range(length):
     now_tkn = tokens[index]
-    #nest_num = _setup_nest(now_tkn, nest_num)
+    # nest_num = _setup_nest(now_tkn, nest_num)
     next_tkn = tokens[index + 1] if index + 1 < length else None
     _setup_objkey(now_tkn, next_tkn)
 
@@ -289,7 +289,7 @@ def _get_arrays(tokens: list, indent: int) -> list:
   return arrays
 
 
-def _get_json_obj(tokens: list, indent: int=1) -> dict:
+def _get_json_obj(tokens: list, indent: int = 1) -> dict:
   objs = None  # memo: 再帰呼び出し開始
   if tokens[0].token_type == TokenType.L_BRACKET:
     objs = _get_arrays(tokens, indent)
@@ -300,9 +300,9 @@ def _get_json_obj(tokens: list, indent: int=1) -> dict:
 
 def parse(strs: str):
   token_list = get_tokens(strs)
-  #_set_attributes(token_list)
-  #nest_indent_list = _get_nest2indent_list(token_list)
-  #_set_indent(token_list, nest_indent_list)
+  # _set_attributes(token_list)
+  # nest_indent_list = _get_nest2indent_list(token_list)
+  # _set_indent(token_list, nest_indent_list)
   json_objs = _get_json_obj(token_list)
   return json_objs, token_list
 
@@ -318,4 +318,3 @@ if __name__ == '__main__':
   main_char = list(json_str)
   main_sample = json.loads(json_str)
   print(main_json == main_sample)
-
