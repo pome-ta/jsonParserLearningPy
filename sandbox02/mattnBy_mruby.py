@@ -63,7 +63,7 @@ class Context:
       c = self.rnext()
       if c == '\\':
         c = self.rnext()
-        if c in ['\\', '/', '\"']:
+        if c in ['\\', '/', '"']:  # todo: `\"` 追加
           s += c
         elif c == 'b':
           s += '\b'
@@ -84,7 +84,6 @@ class Context:
               self.back()
               break
             u = u * 16 | i
-
           s += chr(u)
           '''
           if u < 0x80:  # xxx: 🤔
@@ -167,7 +166,6 @@ class Context:
         break
       if c != ',':
         raise Exception('Expected "," or "]" but not found')
-
     return a
 
   def parse_value(self):
