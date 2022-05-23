@@ -3,9 +3,9 @@
 WHITE_SPACES = [' ', '\t', '\r', '\n']
 NUMBER_LETTERS = '0123456789+-.eE'
 HEX_LETTERS = '0123456789abcdef'
-class Context:
-  
 
+
+class Context:
   def __init__(self, s):
     self.buf = s
     self.index = 0
@@ -29,12 +29,12 @@ class Context:
   def current(self):
     return self.buf[self.index]
 
-  def parse_constant(expect, value):
+  def parse_constant(self, expect, value):
     s = ''
     pos = self.index
     while self.has_next():
       c = self.rnext()
-      if not (c in expect):
+      if c not in expect:
         if s == expect:
           self.back()
           return value
@@ -48,11 +48,11 @@ class Context:
     s = self.rnext()
     while self.has_next():
       c = self.rnext()
-      if not (c in NUMBER_LETTERS):
+      if c not in NUMBER_LETTERS:
         self.back()
         break
       s += c
-    if '.' in s:
+    if ('.' in s) or ('e' in s) or ('E' in s):
       return float(s)
     return int(s)
 
@@ -63,7 +63,7 @@ class Context:
       c = self.rnext()
       if c == '\\':
         c = self.rnext()
-        if c in ['\\', '/']:
+        if c in ['\\', '/', '\"']:
           s += c
         elif c == 'b':
           s += '\b'
@@ -80,10 +80,11 @@ class Context:
           while self.has_next():
             c = self.rnext()
             i = HEX_LETTERS.find(c.lower())
-            if c >= 0:
+            if i < 0:
               self.back()
               break
             u = u * 16 | i
+
           s += chr(u)
           '''
           if u < 0x80:  # xxx: 🤔
@@ -114,10 +115,10 @@ class Context:
             s += chr(0x80 | ((u >> 6) & 0x3f))
             s += chr(0x80 | (u & 0x3f))
           '''
-        elif c == '"':
-          return s
-        else:
-          s += c
+      elif c == '"':
+        return s
+      else:
+        s += c
     raise Exception('Invalid string token')
 
   def parse_object(self):
@@ -131,6 +132,7 @@ class Context:
         break
       if c != '"':
         raise Exception('Expected "\"" but not found')
+
       self.back()
       k = self.parse_string()
       self.skip_white()
@@ -189,7 +191,7 @@ class Context:
       raise Exception('Invalid sequence')
 
 
-def parse(text):
+def rb_parse(text):
   return Context(text).parse_value()
 
 
@@ -197,6 +199,10 @@ if __name__ == '__main__':
   from pathlib import Path
   import json
 
-  json_path = Path('./sample02.json')
+  json_path = Path('./sample01.json')
   json_str = json_path.read_text(encoding='utf-8')
-  main_json = parse(json_str)
+  sample_str = '{"foo": "bar"}'
+  main_json = rb_parse(json_str)
+  main_load = json.loads(json_str)
+  print(main_json == main_load)
+ 

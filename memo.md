@@ -1,3 +1,35 @@
+# 📝 2022/05/23
+
+`mattnBy_mruby.py`
+
+
+```
+         183435 function calls (174987 primitive calls) in 0.068 seconds
+
+   Ordered by: internal time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    62529    0.012    0.000    0.012    0.000 mattnBy_mruby.py:21(rnext)
+     4352    0.010    0.000    0.020    0.000 mattnBy_mruby.py:59(parse_string)
+    47424    0.010    0.000    0.010    0.000 mattnBy_mruby.py:18(has_next)
+    28417    0.009    0.000    0.009    0.000 mattnBy_mruby.py:14(skip_white)
+  768/256    0.007    0.000    0.067    0.000 mattnBy_mruby.py:124(parse_object)
+   7425/1    0.005    0.000    0.068    0.068 mattnBy_mruby.py:173(parse_value)
+    513/1    0.005    0.000    0.068    0.068 mattnBy_mruby.py:155(parse_array)
+     3328    0.004    0.000    0.008    0.000 mattnBy_mruby.py:47(parse_number)
+     1536    0.003    0.000    0.006    0.000 mattnBy_mruby.py:32(parse_constant)
+    14849    0.002    0.000    0.002    0.000 mattnBy_mruby.py:29(current)
+     7936    0.001    0.000    0.001    0.000 mattnBy_mruby.py:26(back)
+     4352    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+        1    0.000    0.000    0.068    0.068 <string>:1(<module>)
+        1    0.000    0.000    0.068    0.068 {built-in method builtins.exec}
+        1    0.000    0.000    0.000    0.000 mattnBy_mruby.py:9(__init__)
+        1    0.000    0.000    0.068    0.068 mattnBy_mruby.py:194(rb_parse)
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+```
+
 # 📝 2022/05/20
 
 
