@@ -2,8 +2,7 @@
 
 `mattnBy_mruby.py`
 
-
-```
+``` console
          183435 function calls (174987 primitive calls) in 0.068 seconds
 
    Ordered by: internal time
@@ -32,10 +31,9 @@
 
 # 📝 2022/05/20
 
-
 `pystaParser04`
 
-```
+``` console
          170706 function calls (168402 primitive calls) in 0.083 seconds
 
    Ordered by: internal time
@@ -66,7 +64,7 @@
 
 属性関係をインクルード
 
-```
+``` console
          179105 function calls (176801 primitive calls) in 0.086 seconds
 
    Ordered by: internal time
@@ -135,7 +133,7 @@
 
 `get_tokens` 設計を変えてみた
 
-```
+``` console
          222378 function calls (220074 primitive calls) in 0.164 seconds
 
    Ordered by: internal time
@@ -214,7 +212,7 @@
 
 `_set_indent` を`get_tokens` 内に
 
-```
+``` console
          192994 function calls (190690 primitive calls) in 1.027 seconds
 
    Ordered by: internal time
@@ -287,7 +285,7 @@
 
 `_setup_nest` を`get_tokens` 内に
 
-```
+``` console
          227051 function calls (224747 primitive calls) in 1.094 seconds
 
    Ordered by: internal time
@@ -368,35 +366,35 @@
 
 処理があまりにも遅いので計測
 
-```
+``` console
 自分のやつ
 file name: sample04.json
-	01回目: 1.0980810000037309
-	02回目: 1.1035174169810489
-	03回目: 1.1014316669898108
-	04回目: 1.0957911669975147
-	05回目: 1.096645042009186
-	06回目: 1.0955302919901442
-	07回目: 1.1065528329927474
-	08回目: 1.0968597079918254
-	09回目: 1.0980925830081105
-	10回目: 1.0968300420208834
+ 01回目: 1.0980810000037309
+ 02回目: 1.1035174169810489
+ 03回目: 1.1014316669898108
+ 04回目: 1.0957911669975147
+ 05回目: 1.096645042009186
+ 06回目: 1.0955302919901442
+ 07回目: 1.1065528329927474
+ 08回目: 1.0968597079918254
+ 09回目: 1.0980925830081105
+ 10回目: 1.0968300420208834
 平均: 1.0989331750985003
 ```
 
-```
+``` console
 ビルドイン json
 file name: sample04.json
-	01回目: 0.0014894999912939966
-	02回目: 0.0016257090028375387
-	03回目: 0.0016498749901074916
-	04回目: 0.0015635419986210763
-	05回目: 0.0015682909870520234
-	06回目: 0.0011102090065833181
-	07回目: 0.001141209009801969
-	08回目: 0.0011617919954005629
-	09回目: 0.0011355419992469251
-	10回目: 0.001093458995455876
+ 01回目: 0.0014894999912939966
+ 02回目: 0.0016257090028375387
+ 03回目: 0.0016498749901074916
+ 04回目: 0.0015635419986210763
+ 05回目: 0.0015682909870520234
+ 06回目: 0.0011102090065833181
+ 07回目: 0.001141209009801969
+ 08回目: 0.0011617919954005629
+ 09回目: 0.0011355419992469251
+ 10回目: 0.001093458995455876
 平均: 0.0013539127976400778
 
 ```
@@ -405,7 +403,7 @@ file name: sample04.json
 
 `run` の引数で、`sort=1` を指定すると`Ordered by: internal time`
 
-```
+``` console
          295170 function calls (292866 primitive calls) in 1.130 seconds
 
    Ordered by: internal time
@@ -484,7 +482,7 @@ file name: sample04.json
         4    0.000    0.000    0.000    0.000 sre_parse.py:82(groups)
 ```
 
-```
+``` console
          13 function calls in 0.001 seconds
 
    Ordered by: standard name
@@ -505,7 +503,7 @@ file name: sample04.json
 
 [youkidearitai / my-json-parser](https://github.com/youkidearitai/my-json-parser/)
 
-```
+``` console
          336219 function calls (327771 primitive calls) in 0.088 seconds
 
    Ordered by: internal time
@@ -572,7 +570,7 @@ file name: sample04.json
 
 Pycharm 先生に怒られてる
 
-```
+``` .py
 class TokenType(Enum):
   NUMBER = auto()  # 数値
   STRING = auto()  # 文字列
@@ -659,7 +657,7 @@ Python の`json` モジュールだと、しれっと上書きされてるぽい
 
 ## JSON BNF
 
-```
+``` c
 json = object;
 object = LBRACE RBRACE | LBRACE {pair {COMMA pair} RBRACE;
 pair = STRING COLON value;
